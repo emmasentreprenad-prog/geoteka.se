@@ -25,8 +25,8 @@ body {
 
 /* Hero */
 header {
-  text-align: center;
-  padding: 120px 20px 80px;
+  border-bottom-left-radius: 40px;
+  border-bottom-right-radius: 40px;
 }
 
 header h1 {
