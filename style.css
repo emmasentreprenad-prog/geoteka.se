@@ -1,70 +1,61 @@
-/* Reset + grund */
-* {
-  box-sizing: border-box;
-}
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+  <meta charset="UTF-8">
+  <title>Geoteka</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
 
-body {
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont,
-               "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-body {
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont,
-               "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-  background: linear-gradient(
-    180deg,
-    #e6f4f3 0%,
-    #f5fdfc 60%
-  );
-  color: #1d1d1f;
-  line-height: 1.6;
-}
-  color: #1d1d1f;
-  line-height: 1.6;
-}
+<header>
+  <h1>Geoteka</h1>
+  <p>Geodata, GIS-analys och hållbara kartlösningar</p>
+</header>
 
-/* Hero */
-header {
-  border-bottom-left-radius: 40px;
-  border-bottom-right-radius: 40px;
-}
+<main>
 
-header h1 {
-  font-size: 3.2rem;
-  margin-bottom: 10px;
-  letter-spacing: -0.03em;
-}
+  <section>
+    <h2>Om oss</h2>
+    <p>
+      Geoteka arbetar med geodata och GIS-analys för hållbar
+      samhällsplanering. Fokus ligger på analyser inom
+      solpotential, grön energi och blå-gröna lösningar
+      för vattenhantering.
+    </p>
+  </section>
 
-header p {
-  font-size: 1.3rem;
-  color: #6e6e73;
-}
+  <section>
+    <h2>Tjänster</h2>
+    <ul>
+      <li>Solpotentialanalys för byggnader och områden</li>
+      <li>GIS-analys för planering av grön energi</li>
+      <li>Analys av grönt vatten, dagvatten och blå-grön infrastruktur</li>
+      <li>Kartproduktion och geodatabearbetning</li>
+    </ul>
+  </section>
 
-/* Layout */
-main {
-  max-width: 900px;
-  margin: 0 auto 120px;
-  padding: 0 20px;
-}
+  <section>
+    <h2>Hållbar analys</h2>
+    <p>
+      Med GIS som verktyg visualiserar och analyserar vi
+      förutsättningar för förnybar energi, gröna ytor och
+      hållbar vattenhantering – som stöd för beslut i
+      tidiga planeringsskeden.
+    </p>
+  </section>
 
-/* Cards */
-section {
-  background: white;
-  border-radius: 20px;
-  padding: 40px;
-  margin-bottom: 40px;
-  box-shadow: 0 20px 40px rgba(0,0,0,0.06);
-}
+  <section>
+    <h2>Kundcase</h2>
+    <p>
+      Exempel på uppdrag inom solenergi,
+      hållbar markanvändning och vattenhantering
+      presenteras här.
+    </p>
+  </section>
 
-section h2 {
-  margin-top: 0;
-  font-size: 1.6rem;
-}
+</main>
 
-section ul {
-  padding-left: 20px;
-}
-
-section li {
-  margin-bottom: 8px;
+</body>
+</html>
 }
