@@ -15,8 +15,18 @@ body {
 
 /* Header */
 header {
-  background: #cfe8e5; /* djupare turkos */
-  padding: 120px 20px 100px;
+  position: relative;
+  background:
+    linear-gradient(
+      rgba(22, 58, 58, 0.65),
+      rgba(22, 58, 58, 0.35)
+    ),
+    url("images/gotland-hero.jpg");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+
+  padding: 140px 20px 120px;
   border-bottom-left-radius: 48px;
   border-bottom-right-radius: 48px;
 }
