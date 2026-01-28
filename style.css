@@ -9,17 +9,17 @@ body {
   font-family: -apple-system, BlinkMacSystemFont,
                "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
   background: #f3faf9;
-  color: #163a3a; /* mörk turkos text */
+  color: #163a3a;
   line-height: 1.6;
 }
 
-/* Header */
+/* Header med bakgrundsbild */
 header {
   position: relative;
   background:
     linear-gradient(
-      rgba(207, 232, 229, 0.75),
-      rgba(207, 232, 229, 0.55)
+      rgba(207, 232, 229, 0.55),
+      rgba(207, 232, 229, 0.35)
     ),
     url("images/gotland-hero.jpg");
   background-size: cover;
@@ -31,21 +31,30 @@ header {
   border-bottom-right-radius: 48px;
 }
 
-/* Header text */
+/* Header-text */
 header h1 {
-max-width: 900px;
-margin: 0 auto 12px;
-font-size: 3.2rem;
-letter-spacing: -0.03em;
-color: #0f2f2e; /* mörk turkos */
+  max-width: 900px;
+  margin: 0 auto 12px;
+  font-size: 3.2rem;
+  letter-spacing: -0.03em;
+  color: #0f2f2e;
 }
 
-
 header p {
-max-width: 900px;
-margin: 0 auto;
-font-size: 1.25rem;
-color: #2f5f5d;
+  max-width: 900px;
+  margin: 0 auto;
+  font-size: 1.25rem;
+  color: #2f5f5d;
+}
+
+/* Tagline */
+header .tagline {
+  margin-top: 16px;
+  font-size: 0.95rem;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #1f4f4d;
 }
 
 /* Main layout */
