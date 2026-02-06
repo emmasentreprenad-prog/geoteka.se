@@ -50,7 +50,7 @@ body {
   text-decoration: underline;
 }
 
-/* Dropdown */
+/* DROPDOWN */
 .dropdown-menu {
   display: none;
   position: absolute;
@@ -64,27 +64,16 @@ body {
 }
 
 .dropdown-menu li a {
+  display: block;
+  padding: 0.75rem 1rem;
   white-space: nowrap;
 }
 
-
-.dropdown-menu li {
-  padding: 0;
-}
-
-.dropdown-menu a {
-  display: block;
-  padding: 0.75rem 1rem;
-  font-weight: 500;
-}
-
-.dropdown-menu a:hover {
-  background: #f0f0f0;
-}
-
-.dropdown:hover .dropdown-menu {
+/* Visa ENDAST vid hover */
+.dropdown:hover > .dropdown-menu {
   display: block;
 }
+
 
 /* =========================
    HERO
