@@ -79,8 +79,10 @@ body {
    HERO
 ========================= */
 .hero {
-  background: #eef5f1;
+  background: url("images/solochvatten.png") center / cover no-repeat;
   padding: 4rem 2rem;
+}
+
 }
 
 .hero-content {
