@@ -60,3 +60,20 @@ p {
         opacity: 1;
     }
 }
+.page-text {
+    background: #f7fafa;
+    color: #222;
+    padding: 80px 20px;
+}
+
+.page-text h2 {
+    max-width: 800px;
+    margin: 60px auto 15px;
+    font-size: 26px;
+}
+
+.page-text p {
+    max-width: 800px;
+    margin: 0 auto;
+    line-height: 1.7;
+}
