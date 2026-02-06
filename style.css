@@ -19,6 +19,8 @@ html, body {
     display: flex;
     justify-content: center;
     align-items: center;
+    position: relative;
+
 }
 
 .content {
@@ -37,4 +39,24 @@ h1 {
 p {
     font-size: 18px;
     margin-bottom: 10px;
+}
+.background::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+        rgba(0, 0, 0, 0.35),
+        rgba(160, 220, 220, 0.35)
+    );
+    animation: fadeToTurquoise 12s ease-in-out forwards;
+    pointer-events: none;
+}
+
+@keyframes fadeToTurquoise {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
 }
