@@ -1,21 +1,11 @@
-/* =====================
-   FÄRGER & BAS
-===================== */
-:root {
-  --primary: #0f5c5c;        /* mörk turkos */
-  --primary-soft: #e6f2f2;
-  --text-dark: #0b2e2e;
-  --text-muted: #4f6f6f;
-}
-
-* {
-  box-sizing: border-box;
-}
+/* =========================
+   GRUND
+========================= */
 
 body {
   margin: 0;
-  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-  color: var(--text-dark);
+  font-family: system-ui, sans-serif;
+  color: #0f4f4a;
   line-height: 1.6;
 }
 
@@ -24,9 +14,9 @@ body {
 ========================= */
 
 .main-nav {
+  background: white;
   position: relative;
   z-index: 3000;
-  background: white;
 }
 
 .main-nav ul {
@@ -43,39 +33,30 @@ body {
   color: #0f4f4a;
 }
 
-/* Dropdown container */
+/* Dropdown */
 .dropdown {
   position: relative;
 }
 
-/* HIDDEN by default */
 .dropdown-menu {
   display: none;
   position: absolute;
   top: 100%;
   left: 0;
   background: white;
-  padding: 0.75rem 0;
+  min-width: 240px;
   border-radius: 12px;
   box-shadow: 0 12px 30px rgba(0,0,0,0.15);
-  min-width: 240px;
-  z-index: 4000;
+  padding: 0.5rem 0;
 }
 
-/* Show ONLY on hover */
 .dropdown:hover .dropdown-menu {
   display: block;
-}
-
-/* Dropdown links */
-.dropdown-menu li {
-  padding: 0;
 }
 
 .dropdown-menu a {
   display: block;
   padding: 0.75rem 1.25rem;
-  color: #0f4f4a;
 }
 
 .dropdown-menu a:hover {
@@ -90,43 +71,51 @@ body {
   position: relative;
   height: 70vh;
   background:
-    linear-gradient(
-      rgba(10, 80, 75, 0.25),
-      rgba(10, 80, 75, 0.25)
-    ),
+    linear-gradient(rgba(0,0,0,0.25), rgba(0,0,0,0.25)),
     url("images/solochvatten.png") center / cover no-repeat;
 }
 
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  animation: heroFade 1.2s ease-out forwards;
-}
-
-@keyframes heroFade {
-  from {
-    opacity: 0;
-    transform: scale(1.03);
-  }
-  to {
-    opacity: 1;
-    transform: scale(1);
-  }
-}
-
-/* Innehållet */
 .hero-content {
   position: absolute;
   right: 8%;
   top: 50%;
   transform: translateY(-50%);
   max-width: 520px;
-  color: #0f4f4a;
   animation: fadeInUp 1.2s ease forwards;
 }
 
+.hero h1 {
+  font-size: 4rem;
+  margin: 0;
+  color: #0f4f4a;
+}
+
+.tagline {
+  font-style: italic;
+  font-size: 1.2rem;
+}
+
+.subline {
+  font-size: 0.95rem;
+}
+
+/* =========================
+   CONTENT
+========================= */
+
+section {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 4rem 2rem;
+}
+
+section h2 {
+  text-align: center;
+}
+
+/* =========================
+   ANIMATION
+========================= */
 
 @keyframes fadeInUp {
   from {
@@ -137,35 +126,4 @@ body {
     opacity: 1;
     transform: translateY(0);
   }
-}
-
-
-/* Rubrik */
-.hero h1 {
-  font-size: 4rem;
-  color: #0b5f5f;
-  margin-bottom: 1rem;
-}
-
-/* Underrubrik – mer skrivstil */
-.hero .subtitle {
-  font-size: 1.4rem;
-  font-style: italic;
-  letter-spacing: 0.04em;
-  margin-bottom: 0.5rem;
-}
-
-/* Rad med punkter */
-.hero .tagline {
-  font-size: 1rem;
-  opacity: 0.9;
-}
-section {
-  max-width: 900px;
-  margin: 0 auto;
-  padding: 4rem 2rem;
-}
-
-section h2 {
-  text-align: center;
 }
