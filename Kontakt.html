@@ -1,39 +1,33 @@
----
----
 <!DOCTYPE html>
 <html lang="sv">
 <head>
   <meta charset="UTF-8">
   <title>Kontakt – GeoTeka</title>
-  <meta name="description" content="Kontakta GeoTeka för solpotentialanalyser och analyser av grönt och blått vatten.">
   <link rel="stylesheet" href="style.css">
 </head>
-
 <body>
 
-{% include nav.html %}
+<nav class="main-nav">
+  <ul>
+    <li><a href="index.html">Hem</a></li>
+    <li class="dropdown">
+      <a href="Tjanster.html">Tjänster</a>
+      <ul class="dropdown-menu">
+        <li><a href="Solpotential.html">Solpotentialanalys</a></li>
+        <li><a href="Vattenanalys.html">Grönt & blått vatten</a></li>
+      </ul>
+    </li>
+    <li><a href="Kontakt.html">Kontakt</a></li>
+  </ul>
+</nav>
 
-<header class="hero">
-  <div class="hero-content">
-    <h1>Kontakt</h1>
-    <p class="subtitle">Hör av dig för analys, samarbete eller frågor</p>
-  </div>
-</header>
-
-<main>
+<section>
+  <h2>Kontakt</h2>
   <p>
-    GeoTeka erbjuder GIS-baserade analyser inom solenergi och vattenresurser.
-    Kontakta mig gärna för offert, frågor eller vidare dialog.
+    📧 <a href="mailto:emma@geoteka.se">emma@geoteka.se</a>
   </p>
-
-  <section class="contact-box">
-    <p><strong>Företag:</strong> GeoTeka</p>
-    <p><strong>E-post:</strong>
-      <a href="mailto:emma@gmail.com">emma@geoteka.se</a>
-    </p>
-    <p><strong>Plats:</strong> Sverige</p>
-  </section>
-</main>
+</section>
 
 </body>
 </html>
+
