@@ -46,117 +46,74 @@ body {
   color: #0f4f4b;
 }
 
-/* =========================
-   DROPDOWN – GÖMD SOM STANDARD
-========================= */
+/* =====================
+   DROPDOWN
+===================== */
+
+.dropdown {
+  position: relative;
+}
 
 .dropdown-menu {
-  display: none;                 /* VIKTIGT */
+  display: none;
   position: absolute;
-  top: 100%;                     /* exakt under "Tjänster" */
+  top: 100%;
   left: 0;
-  background: #ffffff;
-  padding: 0.75rem 0;
-  min-width: 240px;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+
+  background: white;
+  padding: 0.5rem 0;
   border-radius: 8px;
-  z-index: 5000;
+
+  box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+  z-index: 9999;
 }
 
-.dropdown-menu li a {
-  display: block;
-  padding: 0.75rem 1.25rem;
-  color: #0f4f4b;
-  white-space: nowrap;
-}
-
-.dropdown-menu li a:hover {
-  background: #eef5f3;
-}
-
-/* =========================
-   VISA ENDAST VID HOVER
-========================= */
-
-.dropdown:hover > .dropdown-menu {
+.dropdown:hover .dropdown-menu {
   display: block;
 }
+
 
 
 /* =====================
-   HERO / BILD
+   HERO
 ===================== */
+
 .hero {
   position: relative;
-  background: url("images/solochvatten.png") center / cover no-repeat;
-  padding: 7rem 2rem;
+  min-height: 70vh;
+  background: 
+    linear-gradient(
+      rgba(0, 60, 60, 0.35),
+      rgba(0, 60, 60, 0.35)
+    ),
+    url("images/solochvatten.png") center / cover no-repeat;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  animation: heroFade 1.2s ease-out forwards;
 }
 
-
-
-.hero::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: rgba(230, 242, 242, 0.85);
+@keyframes heroFade {
+  from {
+    opacity: 0;
+    transform: scale(1.03);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
 }
 
+/* Innehållet */
 .hero-content {
-  max-width: 900px;
-  margin: 0 auto;
   text-align: center;
-  background: rgba(255, 255, 255, 0.75); /* ljus glasruta */
-  padding: 2.5rem 3rem;
-  border-radius: 16px;
-  animation: fadeUp 1.1s ease-out both;
+  color: #083c3c;
+  animation: textFade 1.4s ease-out forwards;
 }
 
-
-/* =====================
-   RUBRIK & UNDERRUBRIK
-===================== */
-.hero h1 {
-  font-size: 3.4rem;
-  font-weight: 700;
-  letter-spacing: 0.05em;
-  color: #0f4f4b;
-}
-
-.subtitle {
-  font-style: italic;
-  font-size: 1.25rem;
-  opacity: 0.9;
-}
-
-
-.hero p {
-  font-size: 1rem;
-  color: var(--text-dark);
-}
-
-/* =====================
-   INNEHÅLL
-===================== */
-main {
-  max-width: 900px;
-  margin: auto;
-  padding: 3rem 2rem;
-}
-
-h2 {
-  color: var(--primary);
-  margin-top: 3rem;
-}
-
-p {
-  margin-bottom: 1.25rem;
-}
-
-/* =========================
-   ANIMATIONER
-========================= */
-
-@keyframes fadeUp {
+@keyframes textFade {
   from {
     opacity: 0;
     transform: translateY(20px);
@@ -167,12 +124,23 @@ p {
   }
 }
 
-/* Hero-text */
-.hero-content {
-  animation: fadeUp 1.1s ease-out both;
+/* Rubrik */
+.hero h1 {
+  font-size: 4rem;
+  color: #0b5f5f;
+  margin-bottom: 1rem;
 }
 
-/* Dropdown animation */
-.dropdown-menu {
-  animation: fadeUp 0.3s ease-out both;
+/* Underrubrik – mer skrivstil */
+.hero .subtitle {
+  font-size: 1.4rem;
+  font-style: italic;
+  letter-spacing: 0.04em;
+  margin-bottom: 0.5rem;
+}
+
+/* Rad med punkter */
+.hero .tagline {
+  font-size: 1rem;
+  opacity: 0.9;
 }
