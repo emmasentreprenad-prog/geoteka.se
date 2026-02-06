@@ -19,11 +19,11 @@ body {
   line-height: 1.6;
 }
 
-/* =====================
-   NAV / MENY
-===================== */
+/* =========================
+   NAVIGATION
+========================= */
+
 .main-nav {
-  background: white;
   position: relative;
   z-index: 3000;
 }
@@ -31,53 +31,57 @@ body {
 .main-nav ul {
   list-style: none;
   margin: 0;
-  padding: 0.75rem 2rem;
+  padding: 0;
   display: flex;
   gap: 2rem;
-  align-items: center;
+}
+
+.main-nav li {
+  position: relative;
 }
 
 .main-nav a {
   text-decoration: none;
-  color: var(--text-dark);
   font-weight: 600;
+  color: #0f4f4b;
 }
 
-.main-nav a:hover {
-  color: var(--primary);
-}
-
-/* Dropdown */
-.dropdown {
-  position: relative;
-}
+/* =========================
+   DROPDOWN – GÖMD SOM STANDARD
+========================= */
 
 .dropdown-menu {
-  display: none; /* VIKTIGT */
+  display: none;                 /* VIKTIGT */
   position: absolute;
-  top: 100%;
+  top: 100%;                     /* exakt under "Tjänster" */
   left: 0;
-  background: white;
-  min-width: 260px;
-  box-shadow: 0 10px 25px rgba(0,0,0,0.15);
-  padding: 0.5rem 0;
-  z-index: 4000;
+  background: #ffffff;
+  padding: 0.75rem 0;
+  min-width: 240px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+  border-radius: 8px;
+  z-index: 5000;
 }
 
 .dropdown-menu li a {
   display: block;
   padding: 0.75rem 1.25rem;
+  color: #0f4f4b;
   white-space: nowrap;
 }
 
 .dropdown-menu li a:hover {
-  background: var(--primary-soft);
+  background: #eef5f3;
 }
 
-/* Visa endast vid hover */
+/* =========================
+   VISA ENDAST VID HOVER
+========================= */
+
 .dropdown:hover > .dropdown-menu {
   display: block;
 }
+
 
 /* =====================
    HERO / BILD
