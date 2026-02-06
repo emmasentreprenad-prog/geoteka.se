@@ -26,67 +26,77 @@ body {
 .main-nav {
   position: relative;
   z-index: 3000;
+  background: white;
 }
 
 .main-nav ul {
   list-style: none;
-  margin: 0;
-  padding: 0;
   display: flex;
   gap: 2rem;
-}
-
-.main-nav li {
-  position: relative;
+  margin: 0;
+  padding: 1rem 2rem;
 }
 
 .main-nav a {
   text-decoration: none;
   font-weight: 600;
-  color: #0f4f4b;
+  color: #0f4f4a;
 }
 
-/* =====================
-   DROPDOWN
-===================== */
-
+/* Dropdown container */
 .dropdown {
   position: relative;
 }
 
+/* HIDDEN by default */
 .dropdown-menu {
   display: none;
   position: absolute;
   top: 100%;
   left: 0;
-
   background: white;
-  padding: 0.5rem 0;
-  border-radius: 8px;
-
-  box-shadow: 0 8px 20px rgba(0,0,0,0.15);
-  z-index: 9999;
+  padding: 0.75rem 0;
+  border-radius: 12px;
+  box-shadow: 0 12px 30px rgba(0,0,0,0.15);
+  min-width: 240px;
+  z-index: 4000;
 }
 
+/* Show ONLY on hover */
 .dropdown:hover .dropdown-menu {
   display: block;
 }
 
+/* Dropdown links */
+.dropdown-menu li {
+  padding: 0;
+}
 
+.dropdown-menu a {
+  display: block;
+  padding: 0.75rem 1.25rem;
+  color: #0f4f4a;
+}
 
-/* =====================
+.dropdown-menu a:hover {
+  background: #e6f3f1;
+}
+
+/* =========================
    HERO
-===================== */
+========================= */
 
 .hero {
   position: relative;
-  min-height: 70vh;
-  background: 
+  height: 70vh;
+  background:
     linear-gradient(
-      rgba(0, 60, 60, 0.35),
-      rgba(0, 60, 60, 0.35)
+      rgba(10, 80, 75, 0.25),
+      rgba(10, 80, 75, 0.25)
     ),
     url("images/solochvatten.png") center / cover no-repeat;
+}
+
 
   display: flex;
   align-items: center;
@@ -108,12 +118,17 @@ body {
 
 /* Innehållet */
 .hero-content {
-  text-align: center;
-  color: #083c3c;
-  animation: textFade 1.4s ease-out forwards;
+  position: absolute;
+  right: 8%;
+  top: 50%;
+  transform: translateY(-50%);
+  max-width: 520px;
+  color: #0f4f4a;
+  animation: fadeInUp 1.2s ease forwards;
 }
 
-@keyframes textFade {
+
+@keyframes fadeInUp {
   from {
     opacity: 0;
     transform: translateY(20px);
@@ -123,6 +138,7 @@ body {
     transform: translateY(0);
   }
 }
+
 
 /* Rubrik */
 .hero h1 {
@@ -143,4 +159,13 @@ body {
 .hero .tagline {
   font-size: 1rem;
   opacity: 0.9;
+}
+section {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 4rem 2rem;
+}
+
+section h2 {
+  text-align: center;
 }
