@@ -12,11 +12,19 @@
 <nav class="main-nav">
   <ul>
     <li><a href="/">Hem</a></li>
-    <li><a href="/solpotential.html">Solpotentialanalys</a></li>
-    <li><a href="/vattenanalys.html">Grönt & blått vatten</a></li>
+
+    <li class="dropdown">
+      <a href="/tjanster.html">Tjänster</a>
+      <ul class="dropdown-menu">
+        <li><a href="/solpotential.html">Solpotentialanalys</a></li>
+        <li><a href="/vattenanalys.html">Grönt & blått vatten</a></li>
+      </ul>
+    </li>
+
     <li><a href="/kontakt.html">Kontakt</a></li>
   </ul>
 </nav>
+
 
 <header class="hero">
   <div class="hero-content">
