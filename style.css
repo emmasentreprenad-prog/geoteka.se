@@ -13,26 +13,26 @@ html, body {
 /* HERO */
 .hero {
     min-height: 100vh;
-    background-image: url("images/gotland-hero.png");
+    background-image: url("images/solochvatten.png");
     background-size: cover;
     background-position: top center;
     background-repeat: no-repeat;
     position: relative;
 }
 
-/* MJUK GRADIENT – BÖRJAR UNDER HERO-TEXT */
+/* GRADIENT – MJUK, GIS-KÄNSLA */
 .hero::after {
     content: "";
     position: absolute;
     left: 0;
     right: 0;
     bottom: 0;
-    top: 45%;
+    top: 40%; /* ← JUSTERA HÄR om text ska börja tidigare/senare */
 
     background: linear-gradient(
         to bottom,
         rgba(255, 255, 255, 0) 0%,
-        rgba(210, 235, 235, 0.4) 40%,
+        rgba(210, 235, 235, 0.45) 55%,
         rgba(240, 250, 250, 0.95) 100%
     );
 }
@@ -50,13 +50,13 @@ html, body {
 .hero-content h1 {
     font-size: 80px;
     color: #0b4f55; /* stark mörk turkos */
-    margin-bottom: 20px;
+    margin-bottom: 18px;
 }
 
 .subtitle {
     font-size: 26px;
     color: #0b4f55;
-    margin-bottom: 10px;
+    margin-bottom: 8px;
 }
 
 .tags {
