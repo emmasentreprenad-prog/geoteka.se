@@ -18,12 +18,11 @@ body {
 ========================= */
 .main-nav {
   position: relative;
-  z-index: 3000;              /* Ligger över hero */
+  z-index: 5000;
   background: #ffffff;
-  border-bottom: 1px solid #e5e5e5;
 }
 
-.main-nav ul {
+.main-nav > ul {
   list-style: none;
   display: flex;
   gap: 2rem;
@@ -38,39 +37,51 @@ body {
 }
 
 /* =========================
-   DROPDOWN
+   DROPDOWN – FIXEN
 ========================= */
 .dropdown {
-  position: relative;        /* För absolut barn */
+  position: relative;
 }
 
-/* GÖM SOM STANDARD */
+/* VIKTIGT: bryt flex + göm */
 .dropdown-menu {
-  display: none;
+  display: none !important;
   position: absolute;
-  top: 100%;                 /* Direkt under “Tjänster” */
+  top: 100%;
   left: 0;
+
   background: #ffffff;
   min-width: 260px;
-  box-shadow: 0 8px 24px rgba(0,0,0,0.15);
-  border-radius: 6px;
   padding: 0.5rem 0;
-  z-index: 4000;             /* Över hero-bilden */
+
+  list-style: none;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+  border-radius: 6px;
+
+  z-index: 6000;
 }
 
-.dropdown-menu li a {
+/* TA BORT FLEX PÅ UNDERMENY */
+.dropdown-menu {
+  display: none;
+}
+.dropdown-menu li {
+  display: block;
+}
+
+.dropdown-menu a {
   display: block;
   padding: 0.75rem 1rem;
   font-weight: 500;
   white-space: nowrap;
 }
 
-.dropdown-menu li a:hover {
+.dropdown-menu a:hover {
   background: #f3f3f3;
 }
 
 /* VISA ENDAST VID HOVER */
-.dropdown:hover .dropdown-menu {
+.dropdown:hover > .dropdown-menu {
   display: block;
 }
 
