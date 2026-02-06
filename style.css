@@ -1,126 +1,55 @@
-/* =========================
-   RESET
-========================= */
+/* ======================
+   RESET / BAS
+   ====================== */
+
 * {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
 }
 
-/* =========================
-   BAS
-========================= */
 body {
   font-family: Arial, Helvetica, sans-serif;
   line-height: 1.6;
   color: #222;
-  background-color: #ffffff;
 }
 
-/* =========================
-   NAVIGATION
-========================= */
+/* ======================
+   NAVIGATION + DROPDOWN
+   ====================== */
+
 .main-nav {
-  background: #f5f5f5;
+  background: #fff;
   border-bottom: 1px solid #ddd;
 }
 
 .main-nav ul {
   list-style: none;
   display: flex;
-  align-items: center;
-  gap: 1.5rem;
+  gap: 2rem;
   padding: 1rem 2rem;
-  margin: 0;
+  align-items: center;
 }
-
-.main-nav {
-  position: relative;
-  z-index: 3000;
-}
-
 
 .main-nav a {
   text-decoration: none;
   font-weight: 600;
-  color: #222;
+  color: #000;
 }
 
-.main-nav a:hover {
-  text-decoration: underline;
+/* Dropdown container */
+.dropdown {
+  position: relative;
 }
 
-/* DROPDOWN */
+/* Dropdown menu – hidden by default */
 .dropdown-menu {
   display: none;
   position: absolute;
   top: 100%;
   left: 0;
-  background: #ffffff;
-  border: 1px solid #ddd;
-  min-width: 260px;
-  box-shadow: 0 8px 20px rgba(0,0,0,0.08);
-  z-index: 2000;
-}
-
-.dropdown-menu li a {
-  display: block;
-  padding: 0.75rem 1rem;
-  white-space: nowrap;
-}
-
-/* Visa ENDAST vid hover */
-.dropdown:hover > .dropdown-menu {
-  display: block;
-}
-
-
-/* =========================
-   HERO
-========================= */
-.hero {
-  background: url("images/solochvatten.png") center / cover no-repeat;
-  padding: 4rem 2rem;
-}
-
-}
-
-.hero-content {
-  max-width: 900px;
-  margin: auto;
-}
-
-.hero h1 {
-  font-size: 2.5rem;
-}
-
-.subtitle {
-  font-size: 1.2rem;
-  margin-top: 1rem;
-}
-
-.tags {
-  margin-top: 0.5rem;
-  color: #555;
-}
-
-/* =========================
-   TEXT / INNEHÅLL
-========================= */
-.page-text {
-  max-width: 900px;
-  margin: 3rem auto;
-  padding: 0 2rem;
-}
-
-.page-text h1,
-.page-text h2,
-.page-text h3 {
-  margin-top: 2rem;
-  margin-bottom: 0.5rem;
-}
-
-.page-text p {
-  margin-bottom: 1rem;
-}
+  background: #fff;
+  min-width: 220px;
+  padding: 0.5rem 0;
+  box-shad
 
