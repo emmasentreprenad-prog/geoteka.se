@@ -88,14 +88,10 @@ body {
 ===================== */
 .hero {
   position: relative;
-  background: 
-    linear-gradient(
-      rgba(10, 80, 75, 0.25),
-      rgba(10, 80, 75, 0.35)
-    ),
-    url("images/solochvatten.png") center / cover no-repeat;
-  padding: 6rem 2rem;
+  background: url("images/solochvatten.png") center / cover no-repeat;
+  padding: 7rem 2rem;
 }
+
 
 
 .hero::after {
@@ -106,29 +102,32 @@ body {
 }
 
 .hero-content {
-  position: relative;
-  z-index: 2;
   max-width: 900px;
-  margin: auto;
+  margin: 0 auto;
+  text-align: center;
+  background: rgba(255, 255, 255, 0.75); /* ljus glasruta */
+  padding: 2.5rem 3rem;
+  border-radius: 16px;
+  animation: fadeUp 1.1s ease-out both;
 }
+
 
 /* =====================
    RUBRIK & UNDERRUBRIK
 ===================== */
 .hero h1 {
-  font-size: 4rem;
-  font-weight: 800;
-  letter-spacing: 0.08em;
-  color: var(--primary);
-  margin-bottom: 1rem;
+  font-size: 3.4rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  color: #0f4f4b;
 }
 
 .subtitle {
-  font-size: 1.4rem;
   font-style: italic;
-  color: var(--text-muted);
-  margin-bottom: 0.5rem;
+  font-size: 1.25rem;
+  opacity: 0.9;
 }
+
 
 .hero p {
   font-size: 1rem;
