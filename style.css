@@ -56,9 +56,15 @@ body {
   left: 0;
   background: #ffffff;
   border: 1px solid #ddd;
-  min-width: 220px;
-  z-index: 1000;
+  min-width: 260px;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+  z-index: 2000;
 }
+
+.dropdown-menu li a {
+  white-space: nowrap;
+}
+
 
 .dropdown-menu li {
   padding: 0;
