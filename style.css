@@ -15,11 +15,13 @@ body {
 }
 
 /* ======================
-   NAVIGATION + DROPDOWN
+   NAVIGATION
    ====================== */
 
 .main-nav {
-  background: #fff;
+  position: relative;
+  z-index: 3000;
+  background: #ffffff;
   border-bottom: 1px solid #ddd;
 }
 
@@ -48,8 +50,91 @@ body {
   position: absolute;
   top: 100%;
   left: 0;
-  background: #fff;
+  background: #ffffff;
   min-width: 220px;
   padding: 0.5rem 0;
-  box-shad
+  box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+  z-index: 4000;
+}
+
+/* Show dropdown on hover */
+.dropdown:hover > .dropdown-menu {
+  display: block;
+}
+
+.dropdown-menu li a {
+  display: block;
+  padding: 0.75rem 1rem;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.dropdown-menu li a:hover {
+  background: #f2f2f2;
+}
+
+/* ======================
+   HERO
+   ====================== */
+
+.hero {
+  position: relative;
+  min-height: 420px;
+  background-image: url("images/solochvatten.png");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+/* Overlay för läsbar text */
+.hero::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: rgba(255,255,255,0.55);
+  z-index: 1;
+}
+
+.hero-content {
+  position: relative;
+  z-index: 2;
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 4rem 2rem;
+}
+
+.hero h1 {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+}
+
+.subtitle {
+  font-size: 1.3rem;
+  margin-bottom: 0.5rem;
+}
+
+.tags {
+  font-size: 1rem;
+  opacity: 0.9;
+}
+
+/* ======================
+   MAIN CONTENT
+   ====================== */
+
+.page-text {
+  max-width: 900px;
+  margin: 3rem auto;
+  padding: 0 2rem;
+}
+
+.page-text h1,
+.page-text h2 {
+  margin-top: 2rem;
+  margin-bottom: 1rem;
+}
+
+.page-text p {
+  margin-bottom: 1rem;
+}
 
