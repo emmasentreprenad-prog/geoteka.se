@@ -9,67 +9,67 @@ html, body {
     font-family: Arial, Helvetica, sans-serif;
 }
 
+/* Tillgänglighet */
+.visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0,0,0,0);
+}
+
 /* HERO */
 .background {
-    min-height: 100vh;
+    height: 100vh;
     background-image: url("images/gotland-hero.png");
     background-size: cover;
-    background-position: top center;
+    background-position: center top;
     background-repeat: no-repeat;
 
     position: relative;
-    padding-top: 120px;
 }
 
-/* GRADIENT – börjar VID GeoTeka och nedåt */
+/* MJUK GRADIENT – INTE EN LINJE */
 .background::after {
     content: "";
     position: absolute;
-    top: 280px; /* ← JUST DENNA styr var gradienten börjar */
-    left: 0;
-    right: 0;
-    bottom: 0;
+    inset: 0;
 
     background: linear-gradient(
         to bottom,
         rgba(255, 255, 255, 0) 0%,
-        rgba(200, 235, 235, 0.35) 35%,
-        rgba(240, 250, 250, 0.9) 100%
+        rgba(255, 255, 255, 0) 45%,
+        rgba(230, 247, 247, 0.6) 65%,
+        rgba(240, 250, 250, 0.95) 100%
     );
 
-    animation: fadeInGradient 15.5s ease-in-out forwards;
+    animation: fadeGradient 15.5s ease-in-out forwards;
     opacity: 0;
     pointer-events: none;
 }
 
-@keyframes fadeInGradient {
+@keyframes fadeGradient {
     to { opacity: 1; }
 }
 
-/* HERO-TEXT */
+/* HERO-TEXT (endast underrader) */
 .content {
-    max-width: 900px;
-    margin: 0 auto;
+    position: absolute;
+    top: 55%;
+    left: 50%;
+    transform: translateX(-50%);
     text-align: center;
-    position: relative;
-    z-index: 2;
-}
-
-/* GeoTeka */
-h1 {
-    font-size: 76px;
-    color: #0b4f55; /* stark mörk turkos */
-    margin-bottom: 16px;
+    color: #0b4f55;
 }
 
 /* Underrubrik */
 .content p {
     font-size: 22px;
+    margin-top: 10px;
     color: #0b4f55;
-    margin-bottom: 10px;
 }
 
-/* TEXTSEKTION */
+/* TEXTDEL – ALLT SYNLIGT */
 .page-text {
     background: #f4fbfb;
     padding: 100px 20px;
