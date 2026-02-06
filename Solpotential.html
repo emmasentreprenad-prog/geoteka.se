@@ -1,60 +1,34 @@
----
----
 <!DOCTYPE html>
 <html lang="sv">
 <head>
   <meta charset="UTF-8">
-  <title>Solpotentialanalys | GeoTeka</title>
-  <meta name="description" content="Solpotentialanalys för fastigheter, företag och kommuner. GIS-baserad analys av solinstrålning, skuggning och energipotential.">
+  <title>Solpotentialanalys – GeoTeka</title>
   <link rel="stylesheet" href="style.css">
 </head>
-
 <body>
 
-{% include nav.html %}
+<nav class="main-nav">
+  <ul>
+    <li><a href="index.html">Hem</a></li>
+    <li class="dropdown">
+      <a href="Tjanster.html">Tjänster</a>
+      <ul class="dropdown-menu">
+        <li><a href="Solpotential.html">Solpotentialanalys</a></li>
+        <li><a href="Vattenanalys.html">Grönt & blått vatten</a></li>
+      </ul>
+    </li>
+    <li><a href="Kontakt.html">Kontakt</a></li>
+  </ul>
+</nav>
 
-<header class="hero">
-  <div class="hero-content">
-    <h1>Solpotentialanalys</h1>
-    <p class="subtitle">GIS-baserad analys för hållbar energiplanering</p>
-  </div>
-</header>
-
-<main class="page-text">
-
-  <h1>Vad är en solpotentialanalys?</h1>
+<section>
+  <h2>Solpotentialanalys</h2>
   <p>
-    En solpotentialanalys beräknar hur mycket solenergi som kan produceras på en specifik plats baserat på solinstrålning, lutning, orientering, skuggning och geografiskt läge.
+    GIS-baserad solpotentialanalys visar var solenergi ger störst effekt,
+    baserat på lutning, orientering, skuggning och lokala förutsättningar.
   </p>
-
-  <h2>Hur beräknas solpotential?</h2>
-  <p>
-    Solpotential beräknas med hjälp av GIS, höjddata och solinstrålningsmodeller som analyserar hur solljus träffar ytor över tid och hur skuggor påverkar energiproduktionen.
-  </p>
-
-  <h2>Vad ingår i en solpotentialanalys?</h2>
-  <p>
-    Analysen omfattar beräkning av instrålning, identifiering av lämpliga ytor, skugganalys samt uppskattning av möjlig energiproduktion per år.
-  </p>
-
-  <h2>Vem har nytta av en solpotentialanalys?</h2>
-  <p>
-    Fastighetsägare, företag, kommuner och konsulter använder solpotentialanalyser för att fatta välgrundade beslut om investeringar i solenergi.
-  </p>
-
-  <h2>Vanliga frågor</h2>
-
-  <h3>Kan analysen göras för både tak och mark?</h3>
-  <p>
-    Ja, solpotential kan analyseras för både takytor och markbaserade installationer.
-  </p>
-
-  <h3>Används verkliga skuggor i beräkningen?</h3>
-  <p>
-    Ja, byggnader, vegetation och terräng inkluderas i skugganalysen.
-  </p>
-
-</main>
+</section>
 
 </body>
 </html>
+
