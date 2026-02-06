@@ -1,7 +1,6 @@
-/* ======================
+/* =========================
    RESET / BAS
-   ====================== */
-
+========================= */
 * {
   box-sizing: border-box;
   margin: 0;
@@ -9,20 +8,19 @@
 }
 
 body {
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: Arial, sans-serif;
   line-height: 1.6;
-  color: #222;
+  color: #111;
 }
 
-/* ======================
+/* =========================
    NAVIGATION
-   ====================== */
-
+========================= */
 .main-nav {
   position: relative;
-  z-index: 3000;
+  z-index: 3000;              /* Ligger över hero */
   background: #ffffff;
-  border-bottom: 1px solid #ddd;
+  border-bottom: 1px solid #e5e5e5;
 }
 
 .main-nav ul {
@@ -35,31 +33,29 @@ body {
 
 .main-nav a {
   text-decoration: none;
+  color: #111;
   font-weight: 600;
-  color: #000;
 }
 
-/* Dropdown container */
+/* =========================
+   DROPDOWN
+========================= */
 .dropdown {
-  position: relative;
+  position: relative;        /* För absolut barn */
 }
 
-/* Dropdown menu – hidden by default */
+/* GÖM SOM STANDARD */
 .dropdown-menu {
   display: none;
   position: absolute;
-  top: 100%;
+  top: 100%;                 /* Direkt under “Tjänster” */
   left: 0;
   background: #ffffff;
-  min-width: 220px;
+  min-width: 260px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+  border-radius: 6px;
   padding: 0.5rem 0;
-  box-shadow: 0 10px 25px rgba(0,0,0,0.2);
-  z-index: 4000;
-}
-
-/* Show dropdown on hover */
-.dropdown:hover > .dropdown-menu {
-  display: block;
+  z-index: 4000;             /* Över hero-bilden */
 }
 
 .dropdown-menu li a {
@@ -70,37 +66,36 @@ body {
 }
 
 .dropdown-menu li a:hover {
-  background: #f2f2f2;
+  background: #f3f3f3;
 }
 
-/* ======================
-   HERO
-   ====================== */
+/* VISA ENDAST VID HOVER */
+.dropdown:hover .dropdown-menu {
+  display: block;
+}
 
+/* =========================
+   HERO
+========================= */
 .hero {
   position: relative;
-  min-height: 420px;
-  background-image: url("images/solochvatten.png");
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
+  z-index: 1;
+  background: url("images/solochvatten.png") center / cover no-repeat;
+  padding: 6rem 2rem;
 }
 
-/* Overlay för läsbar text */
-.hero::before {
+.hero::after {
   content: "";
   position: absolute;
   inset: 0;
-  background: rgba(255,255,255,0.55);
-  z-index: 1;
+  background: rgba(255,255,255,0.6); /* Lätt overlay */
 }
 
 .hero-content {
   position: relative;
   z-index: 2;
   max-width: 900px;
-  margin: 0 auto;
-  padding: 4rem 2rem;
+  margin: auto;
 }
 
 .hero h1 {
@@ -109,32 +104,19 @@ body {
 }
 
 .subtitle {
-  font-size: 1.3rem;
-  margin-bottom: 0.5rem;
+  font-size: 1.2rem;
 }
 
-.tags {
-  font-size: 1rem;
-  opacity: 0.9;
-}
-
-/* ======================
-   MAIN CONTENT
-   ====================== */
-
-.page-text {
+/* =========================
+   CONTENT
+========================= */
+main {
   max-width: 900px;
   margin: 3rem auto;
   padding: 0 2rem;
 }
 
-.page-text h1,
-.page-text h2 {
+h2 {
   margin-top: 2rem;
-  margin-bottom: 1rem;
-}
-
-.page-text p {
-  margin-bottom: 1rem;
 }
 
