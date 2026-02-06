@@ -90,8 +90,8 @@ body {
   position: relative;
   background: 
     linear-gradient(
-      rgba(15,79,75,0.55),
-      rgba(15,79,75,0.55)
+      rgba(10, 80, 75, 0.25),
+      rgba(10, 80, 75, 0.35)
     ),
     url("images/solochvatten.png") center / cover no-repeat;
   padding: 6rem 2rem;
@@ -153,3 +153,27 @@ p {
   margin-bottom: 1.25rem;
 }
 
+/* =========================
+   ANIMATIONER
+========================= */
+
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Hero-text */
+.hero-content {
+  animation: fadeUp 1.1s ease-out both;
+}
+
+/* Dropdown animation */
+.dropdown-menu {
+  animation: fadeUp 0.3s ease-out both;
+}
