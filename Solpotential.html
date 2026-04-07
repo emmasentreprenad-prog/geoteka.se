@@ -5,6 +5,70 @@
   <meta charset="UTF-8">
   <title>Solpotentialanalys – GeoTeka</title>
   <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <style>
+    #solar-map {
+      width: 100%;
+      height: 520px;
+      border-radius: 12px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.12);
+      margin: 2rem 0;
+    }
+
+    .map-legend {
+      background: white;
+      padding: 1rem 1.25rem;
+      border-radius: 10px;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.15);
+      font-size: 0.88rem;
+      color: #0f4f4a;
+      line-height: 1.8;
+    }
+
+    .map-legend h4 {
+      margin: 0 0 0.5rem;
+      font-size: 0.9rem;
+    }
+
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .legend-swatch {
+      width: 16px;
+      height: 16px;
+      border-radius: 3px;
+      flex-shrink: 0;
+      border: 1px solid rgba(0,0,0,0.2);
+    }
+
+    .map-info-box {
+      background: #f0f8f7;
+      border-left: 4px solid #0f4f4a;
+      padding: 1rem 1.5rem;
+      border-radius: 0 8px 8px 0;
+      margin: 1.5rem 0;
+      font-size: 0.92rem;
+    }
+
+    .data-sources {
+      display: flex;
+      gap: 0.6rem;
+      flex-wrap: wrap;
+      margin-top: 0.75rem;
+    }
+
+    .data-tag {
+      background: #0f4f4a;
+      color: white;
+      padding: 0.25rem 0.7rem;
+      border-radius: 20px;
+      font-size: 0.78rem;
+      font-weight: 600;
+    }
+  </style>
 </head>
 <body>
 
@@ -15,7 +79,7 @@
       <a href="Tjanster.html">Tjänster</a>
       <ul class="dropdown-menu">
         <li><a href="Solpotential.html">Solpotentialanalys</a></li>
-        <li><a href="Vattenanalys.html">Grönt & blått vatten</a></li>
+        <li><a href="Vattenanalys.html">Grönt &amp; blått vatten</a></li>
       </ul>
     </li>
     <li><a href="Kontakt.html">Kontakt</a></li>
@@ -27,9 +91,125 @@
   <p>
     GIS-baserad solpotentialanalys visar var solenergi ger störst effekt,
     baserat på lutning, orientering, skuggning och lokala förutsättningar.
+    Klicka på zonerna i kartan nedan för att se ett exempelresultat för
+    Visbytrakten på Gotland.
+  </p>
+
+  <div id="solar-map"></div>
+
+  <div class="map-info-box">
+    <strong>Demokarta – Solpotential Visby, Gotland</strong><br>
+    Analysen kombinerar Sentinel-2-satellitdata och Lantmäteriets LiDAR-höjdmodell
+    för att beräkna solinstrålning per zon (kWh/m²/år). Faktorer som lutning,
+    orientering och vegetationsskuggning är inräknade.
+    <div class="data-sources">
+      <span class="data-tag">Sentinel-2 (ESA Copernicus)</span>
+      <span class="data-tag">LiDAR – Lantmäteriet</span>
+      <span class="data-tag">QGIS / GDAL</span>
+    </div>
+  </div>
+
+  <h3>Så fungerar analysen</h3>
+  <p>
+    Utgångspunkten är en Digital Ytmodell (DSM) från Lantmäteriets laserdata
+    kombinerat med multispektral data från Sentinel-2. Vegetationsindex (NDVI)
+    identifierar skuggande träd och grönska, medan lutning och aspekt beräknas
+    från höjdmodellen. Resultatet är en karta som visar var solpaneler ger
+    bäst utbyte – oavsett om det gäller tak, markmontage eller kommunal planering.
+  </p>
+  <p>
+    Vill du ha en analys för din fastighet, kvarter eller kommun?
+    <a href="Kontakt.html">Kontakta oss</a> för en skräddarsydd rapport.
   </p>
 </section>
 
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script>
+  const map = L.map('solar-map').setView([57.628, 18.297], 12);
+
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+    maxZoom: 18
+  }).addTo(map);
+
+  const colorMap = {
+    "Mycket hög": "#e31a1c",
+    "Hög":        "#ff7f00",
+    "Medel":      "#ffd700",
+    "Låg":        "#74c476"
+  };
+
+  const kwhRanges = {
+    "Mycket hög": "1 100–1 200 kWh/m²/år",
+    "Hög":        "1 000–1 100 kWh/m²/år",
+    "Medel":      "850–1 000 kWh/m²/år",
+    "Låg":        "700–850 kWh/m²/år"
+  };
+
+  // 5 columns × 4 rows covering ~5×4 km around Visby
+  const startLat = 57.608, startLng = 18.252;
+  const dLat = 0.010,      dLng     = 0.018;
+
+  const gridData = [
+    ["Hög",   "Hög",       "Mycket hög", "Hög",  "Medel"],
+    ["Medel", "Mycket hög","Hög",        "Hög",  "Medel"],
+    ["Låg",   "Medel",     "Hög",        "Hög",  "Låg"  ],
+    ["Låg",   "Låg",       "Medel",      "Hög",  "Medel"],
+  ];
+
+  const features = [];
+  gridData.forEach(function(row, r) {
+    row.forEach(function(potential, c) {
+      const s = startLat + r * dLat;
+      const n = s + dLat;
+      const w = startLng + c * dLng;
+      const e = w + dLng;
+      features.push({
+        type: "Feature",
+        properties: { potential: potential },
+        geometry: {
+          type: "Polygon",
+          coordinates: [[[w,s],[e,s],[e,n],[w,n],[w,s]]]
+        }
+      });
+    });
+  });
+
+  L.geoJSON({ type: "FeatureCollection", features: features }, {
+    style: function(f) {
+      return {
+        fillColor: colorMap[f.properties.potential],
+        fillOpacity: 0.55,
+        color: "#fff",
+        weight: 1.5
+      };
+    },
+    onEachFeature: function(f, layer) {
+      const p = f.properties.potential;
+      layer.bindPopup(
+        "<strong>Solpotential: " + p + "</strong><br>" +
+        "<span style='color:#555'>" + kwhRanges[p] + "</span><br>" +
+        "<small>Baserat på Sentinel-2 + LiDAR-höjdmodell</small>"
+      );
+      layer.on("mouseover", function() { this.setStyle({ fillOpacity: 0.8 }); });
+      layer.on("mouseout",  function() { this.setStyle({ fillOpacity: 0.55 }); });
+    }
+  }).addTo(map);
+
+  // Legend control
+  var legend = L.control({ position: "bottomright" });
+  legend.onAdd = function() {
+    var div = L.DomUtil.create("div", "map-legend");
+    div.innerHTML = "<h4>Solpotential</h4>" +
+      Object.keys(colorMap).map(function(label) {
+        return "<div class='legend-item'>" +
+          "<div class='legend-swatch' style='background:" + colorMap[label] + "'></div>" +
+          "<span>" + label + "</span></div>";
+      }).join("");
+    return div;
+  };
+  legend.addTo(map);
+</script>
+
 </body>
 </html>
-
