@@ -1,0 +1,133 @@
+{% include nav.html %}
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+  <meta charset="UTF-8">
+  <title>Priser – GeoTeka</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<nav class="main-nav">
+  <ul>
+    <li><a href="index.html">Hem</a></li>
+    <li class="dropdown">
+      <a href="Tjanster.html">Tjänster</a>
+      <ul class="dropdown-menu">
+        <li><a href="Solpotential.html">Solpotentialanalys</a></li>
+        <li><a href="Vattenanalys.html">Grönt &amp; blått vatten</a></li>
+      </ul>
+    </li>
+    <li><a href="Priser.html">Priser</a></li>
+    <li><a href="Kontakt.html">Kontakt</a></li>
+  </ul>
+</nav>
+
+<div class="pricing-hero">
+  <h2>Priser</h2>
+  <p>
+    Välj det paket som passar din fastighet, ditt kvarter eller din kommun.<br>
+    Alla analyser levereras som en detaljerad PDF-rapport inom 5 arbetsdagar.
+  </p>
+</div>
+
+<div class="pricing-grid">
+
+  <!-- Fastighetsanalys -->
+  <div class="pricing-card">
+    <p class="plan-name">Fastighetsanalys</p>
+    <p class="plan-desc">Solpotential för en enskild fastighet eller byggnad.</p>
+    <p class="plan-price">4 900 <span>SEK</span></p>
+    <p class="plan-price-note">exkl. moms</p>
+    <ul class="feature-list">
+      <li>Solpotentialkarta (PDF)</li>
+      <li>kWh/m²/år per takyta</li>
+      <li>Sentinel-2 + LiDAR-analys</li>
+      <li>Skuggningsanalys</li>
+      <li>Rekommenderad panelyta</li>
+    </ul>
+    <!--
+      STRIPE SETUP: Replace the href below with your Stripe Payment Link URL.
+      Create one at https://dashboard.stripe.com/payment-links
+      Price: 4900 SEK (490000 öre), one-time payment.
+    -->
+    <a class="btn-outline" href="https://buy.stripe.com/REPLACE_WITH_FASTIGHET_LINK">Beställ nu</a>
+  </div>
+
+  <!-- Kvartersanalys (featured) -->
+  <div class="pricing-card pricing-card--featured">
+    <div class="pricing-badge">Populärast</div>
+    <p class="plan-name">Kvartersanalys</p>
+    <p class="plan-desc">Heltäckande analys för ett kvarter eller ett område upp till 10 ha.</p>
+    <p class="plan-price">9 900 <span>SEK</span></p>
+    <p class="plan-price-note">exkl. moms</p>
+    <ul class="feature-list">
+      <li>Allt i Fastighetsanalys</li>
+      <li>Karta över hela kvarteret</li>
+      <li>Prioriteringslista per byggnad</li>
+      <li>Vattenanalys inkluderat</li>
+      <li>Presentationsunderlag (PPTX)</li>
+      <li>30 min digital genomgång</li>
+    </ul>
+    <!--
+      STRIPE SETUP: Replace the href below with your Stripe Payment Link URL.
+      Create one at https://dashboard.stripe.com/payment-links
+      Price: 9900 SEK (990000 öre), one-time payment.
+    -->
+    <a class="btn-primary" href="https://buy.stripe.com/REPLACE_WITH_KVARTER_LINK">Beställ nu</a>
+  </div>
+
+  <!-- Kommunpaket -->
+  <div class="pricing-card">
+    <p class="plan-name">Kommunpaket</p>
+    <p class="plan-desc">Skräddarsydd analys för en hel kommun eller större planprojekt.</p>
+    <p class="plan-price plan-price--contact">Offert</p>
+    <p class="plan-price-note">kontakta oss för prisförslag</p>
+    <ul class="feature-list">
+      <li>Allt i Kvartersanalys</li>
+      <li>Täcker hela kommunytan</li>
+      <li>GIS-filer (GeoJSON/Shapefile)</li>
+      <li>Integrering i kommunens system</li>
+      <li>Workshop på plats</li>
+      <li>Löpande support</li>
+    </ul>
+    <a class="btn-outline" href="Kontakt.html">Kontakta oss</a>
+  </div>
+
+</div>
+
+<p class="pricing-vat-note">Alla priser exklusive moms (25&nbsp;%). Faktura skickas per e-post efter genomförd betalning.</p>
+
+<div class="pricing-faq">
+  <div class="pricing-faq-inner">
+    <h2>Vanliga frågor</h2>
+
+    <div class="faq-item">
+      <p class="faq-q">Hur lång är leveranstiden?</p>
+      <p class="faq-a">Vi levererar analysen som en PDF-rapport inom 5 arbetsdagar från bekräftad beställning. För Kommunpaket varierar leveranstiden beroende på projektets storlek.</p>
+    </div>
+
+    <div class="faq-item">
+      <p class="faq-q">Vilka uppgifter behöver ni från mig?</p>
+      <p class="faq-a">Vi behöver fastighetsbeteckning eller adress (för Fastighetsanalys), alternativt ett kartområde med koordinater (för Kvartersanalys). All övrig data hämtar vi från offentliga källor som Sentinel-2 och Lantmäteriet.</p>
+    </div>
+
+    <div class="faq-item">
+      <p class="faq-q">Kan jag använda analysen i en bygglovsansökan?</p>
+      <p class="faq-a">Ja, rapporten är utformad för att fungera som beslutsunderlag och kan bifogas tillstånds- och bygglovsansökningar. Vi anger alla datakällor och beräkningsmetoder tydligt.</p>
+    </div>
+
+    <div class="faq-item">
+      <p class="faq-q">Erbjuder ni vattenanalys separat?</p>
+      <p class="faq-a">Vattenanalys ingår i Kvartersanalys och Kommunpaket. Behöver du enbart en vattenanalys för en enskild fastighet, <a href="Kontakt.html">kontakta oss</a> så tar vi fram ett skräddarsytt erbjudande.</p>
+    </div>
+
+    <div class="faq-item">
+      <p class="faq-q">Hur betalas analysen?</p>
+      <p class="faq-a">Betalning sker säkert via Stripe (kort eller banköverföring). En faktura skickas automatiskt till din e-postadress efter genomförd betalning.</p>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

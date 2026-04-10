@@ -127,3 +127,251 @@ section h2 {
     transform: translateY(0);
   }
 }
+
+/* =========================
+   PRICING PAGE
+========================= */
+
+.pricing-hero {
+  background: #f0f8f7;
+  text-align: center;
+  padding: 3rem 2rem 2rem;
+}
+
+.pricing-hero p {
+  color: #444;
+  font-size: 1.05rem;
+  margin: 0;
+}
+
+.pricing-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.75rem;
+  max-width: 1100px;
+  margin: 3rem auto;
+  padding: 0 2rem;
+}
+
+.pricing-card {
+  border: 2px solid #d0e8e5;
+  border-radius: 16px;
+  padding: 2rem;
+  background: white;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  transition: box-shadow 0.2s;
+}
+
+.pricing-card:hover {
+  box-shadow: 0 8px 30px rgba(15, 79, 74, 0.15);
+}
+
+.pricing-card--featured {
+  border-color: #0f4f4a;
+  box-shadow: 0 4px 20px rgba(15, 79, 74, 0.18);
+}
+
+.pricing-badge {
+  position: absolute;
+  top: -14px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #0f4f4a;
+  color: white;
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 0.3rem 1rem;
+  border-radius: 20px;
+  white-space: nowrap;
+}
+
+.plan-name {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: #0f4f4a;
+  margin: 0 0 0.4rem;
+}
+
+.plan-desc {
+  font-size: 0.9rem;
+  color: #666;
+  margin: 0 0 1.25rem;
+  flex-grow: 0;
+}
+
+.plan-price {
+  font-size: 2.4rem;
+  font-weight: 800;
+  color: #0f4f4a;
+  margin: 0;
+  line-height: 1;
+}
+
+.plan-price span {
+  font-size: 1rem;
+  font-weight: 400;
+  color: #888;
+}
+
+.plan-price--contact {
+  font-size: 1.75rem;
+  padding-top: 0.4rem;
+}
+
+.plan-price-note {
+  font-size: 0.8rem;
+  color: #999;
+  margin: 0.3rem 0 1.5rem;
+}
+
+.feature-list {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 2rem;
+  flex-grow: 1;
+}
+
+.feature-list li {
+  padding: 0.35rem 0;
+  font-size: 0.91rem;
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+}
+
+.feature-list li::before {
+  content: "✓";
+  color: #0f4f4a;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+.btn-primary {
+  display: block;
+  padding: 0.85rem;
+  background: #0f4f4a;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  font-size: 1rem;
+  font-weight: 600;
+  text-align: center;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.btn-primary:hover {
+  background: #0a3632;
+}
+
+.btn-outline {
+  display: block;
+  padding: 0.85rem;
+  background: transparent;
+  color: #0f4f4a;
+  border: 2px solid #0f4f4a;
+  border-radius: 10px;
+  font-size: 1rem;
+  font-weight: 600;
+  text-align: center;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+}
+
+.btn-outline:hover {
+  background: #0f4f4a;
+  color: white;
+}
+
+.pricing-vat-note {
+  text-align: center;
+  font-size: 0.85rem;
+  color: #888;
+  margin: -1rem 0 2rem;
+}
+
+.pricing-faq {
+  background: #f0f8f7;
+  padding: 4rem 2rem;
+}
+
+.pricing-faq-inner {
+  max-width: 700px;
+  margin: 0 auto;
+}
+
+.pricing-faq-inner h2 {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.faq-item {
+  border-bottom: 1px solid #c8e0dd;
+  padding: 1.25rem 0;
+}
+
+.faq-item:last-child {
+  border-bottom: none;
+}
+
+.faq-q {
+  font-weight: 700;
+  color: #0f4f4a;
+  margin: 0 0 0.4rem;
+}
+
+.faq-a {
+  font-size: 0.93rem;
+  color: #444;
+  margin: 0;
+}
+
+.faq-a a {
+  color: #0f4f4a;
+}
+
+/* =========================
+   PRICING CTA (on service pages)
+========================= */
+
+.pricing-cta {
+  background: #f0f8f7;
+  border: 2px solid #0f4f4a;
+  border-radius: 12px;
+  padding: 1.5rem 2rem;
+  margin: 2rem 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.pricing-cta p {
+  margin: 0;
+  font-weight: 600;
+}
+
+.pricing-cta .btn-primary {
+  display: inline-block;
+  white-space: nowrap;
+  padding: 0.7rem 1.5rem;
+}
+
+@media (max-width: 768px) {
+  .pricing-grid {
+    grid-template-columns: 1fr;
+    max-width: 480px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .pricing-cta {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
