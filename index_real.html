@@ -1,0 +1,546 @@
+<!DOCTYPE html><html lang="sv"><head><meta charset="utf-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GeoTeka | Geospatial &amp; Miljöanalys</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <style>
+        :root {
+            --solar-gold: #fbbf24;
+            --water-turquoise: #06b6d4;
+            --env-green: #4ade80;
+            --carbon-emerald: #10b981;
+            --ai-violet: #a78bfa;
+            --dark-bg: #0f172a;
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--dark-bg);
+            color: white;
+            overflow-x: hidden;
+        }
+        .hero-split {
+            display: flex;
+            height: 100vh;
+            width: 100%;
+            position: relative;
+        }
+        .split-side {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            padding: 2rem 1.5rem;
+            transition: flex 0.6s cubic-bezier(0.4,0,0.2,1);
+            overflow: hidden;
+            cursor: pointer;
+        }
+        .split-side:not(:last-child) { border-right: 1px solid rgba(255,255,255,0.08); }
+        .solar-side   { background: linear-gradient(160deg, rgba(251,191,36,0.12) 0%, rgba(15,23,42,1) 100%); }
+        .water-side   { background: linear-gradient(160deg, rgba(6,182,212,0.12) 0%, rgba(15,23,42,1) 100%); }
+        .env-side     { background: linear-gradient(160deg, rgba(74,222,128,0.12) 0%, rgba(15,23,42,1) 100%); }
+        .carbon-side  { background: linear-gradient(160deg, rgba(16,185,129,0.12) 0%, rgba(15,23,42,1) 100%); }
+        .ai-side      { background: linear-gradient(160deg, rgba(167,139,250,0.12) 0%, rgba(15,23,42,1) 100%); }
+        .overlay-grid {
+            position: absolute;
+            inset: 0;
+            background-image: radial-gradient(circle, rgba(255,255,255,0.04) 1px, transparent 1px);
+            background-size: 28px 28px;
+            pointer-events: none;
+        }
+        .side-desc {
+            opacity: 0;
+            transform: translateY(10px);
+            transition: opacity 0.4s ease, transform 0.4s ease;
+            max-width: 220px;
+            text-align: center;
+        }
+        .split-side.active .side-desc { opacity: 1; transform: translateY(0); }
+        .side-cta {
+            opacity: 0;
+            transform: translateY(10px);
+            transition: opacity 0.4s ease 0.1s, transform 0.4s ease 0.1s;
+        }
+        .split-side.active .side-cta { opacity: 1; transform: translateY(0); }
+        .nav-glass {
+            background: rgba(15,23,42,0.85);
+            backdrop-filter: blur(14px);
+            border-bottom: 1px solid rgba(255,255,255,0.08);
+        }
+        .cta-button { transition: all 0.3s ease; }
+        .cta-button:hover { transform: translateY(-2px); box-shadow: 0 10px 20px rgba(0,0,0,0.35); }
+        .scroll-reveal { opacity: 0; transform: translateY(28px); }
+        .img-container {
+            box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+            transition: transform 0.5s cubic-bezier(0.175,0.885,0.32,1.275);
+            background: #1e293b;
+            min-height: 300px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .img-container:hover { transform: scale(1.02); }
+        .lang-btn { cursor:pointer; opacity:0.5; transition:opacity 0.3s, transform 0.2s; }
+        .lang-btn.active { opacity:1; transform:scale(1.1); border-bottom:2px solid white; }
+        .lang-btn:hover { opacity:1; }
+        .text-turquoise  { color: var(--water-turquoise); }
+        .bg-turquoise    { background-color: var(--water-turquoise); }
+        .text-env        { color: var(--env-green); }
+        .text-carbon     { color: var(--carbon-emerald); }
+        .text-ai         { color: var(--ai-violet); }
+        @media (max-width: 768px) {
+            .hero-split { flex-direction: column; height: auto; }
+            .split-side { min-height: 200px; flex: none !important; }
+            .side-desc, .side-cta { opacity: 1; transform: none; }
+        }
+
+        /* ── SOLAR MAP ── */
+        #solar-map {
+            height: 500px;
+            border-radius: 16px;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        .solar-map-legend {
+            background: rgba(15,23,42,0.92);
+            padding: 0.75rem 1rem;
+            border-radius: 10px;
+            border: 1px solid rgba(255,255,255,0.1);
+            font-size: 0.8rem;
+            color: white;
+            line-height: 2;
+        }
+        .solar-map-legend h4 { margin: 0 0 0.4rem; font-size: 0.82rem; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase; }
+        .legend-row { display: flex; align-items: center; gap: 8px; }
+        .legend-dot { width: 14px; height: 14px; border-radius: 3px; flex-shrink: 0; border: 1px solid rgba(255,255,255,0.2); }
+    </style>
+</head>
+<body dir="ltr" spellcheck="false" style="direction: ltr; min-height: 901px;">
+
+    <!-- Navigation -->
+    <nav class="nav-glass fixed w-full z-50 px-6 py-4 flex justify-between items-center">
+        <div class="text-2xl font-800 tracking-tighter flex items-center gap-0">
+            <span class="text-yellow-400">Geo</span>Teka<span class="text-turquoise">.se</span>
+        </div>
+        <div class="flex items-center gap-6">
+            <div class="hidden md:flex gap-6 text-xs font-semibold uppercase tracking-widest text-gray-400">
+                <a href="#solar" class="hover:text-yellow-400 transition-colors lang-content" data-sv="Solpotential" data-en="Solar" data-es="Solar">Solpotential</a>
+                <a href="#water" class="hover:text-turquoise transition-colors lang-content" data-sv="Vattenanalys" data-en="Water" data-es="Agua">Vattenanalys</a>
+                <a href="#miljogis" class="hover:text-green-400 transition-colors lang-content" data-sv="Miljö-GIS" data-en="Env-GIS" data-es="GIS">Miljö-GIS</a>
+                <a href="#kol" class="hover:text-emerald-400 transition-colors lang-content" data-sv="Kol &amp; Natur" data-en="Carbon" data-es="Carbono">Kol &amp; Natur</a>
+                <a href="#ai" class="hover:text-violet-400 transition-colors lang-content" data-sv="AI-Geo" data-en="AI-Geo" data-es="IA-Geo">AI-Geo</a>
+                <a href="#projekt" class="hover:text-yellow-400 transition-colors lang-content" data-sv="Projekt" data-en="Projects" data-es="Proyectos">Projekt</a>
+                <a href="#about" class="hover:text-green-400 transition-colors lang-content" data-sv="Om oss" data-en="About" data-es="Sobre">Om oss</a>
+                <a href="#contact-me" class="hover:text-white transition-colors lang-content" data-sv="Kontakt" data-en="Contact" data-es="Contacto">Kontakt</a>
+            </div>
+            <div class="flex gap-3 ml-4 border-l border-slate-700 pl-4">
+                <button onclick="changeLang('sv')" class="lang-btn active" id="btn-sv" title="Svenska">
+                    <img src="https://flagcdn.com/w40/se.png" width="22" alt="SV">
+                </button>
+                <button onclick="changeLang('en')" class="lang-btn" id="btn-en" title="English">
+                    <img src="https://flagcdn.com/w40/gb.png" width="22" alt="EN">
+                </button>
+                <button onclick="changeLang('es')" class="lang-btn" id="btn-es" title="Español">
+                    <img src="https://flagcdn.com/w40/es.png" width="22" alt="ES">
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- HERO — 5 panels -->
+    <section class="hero-split" id="hero">
+        <div class="overlay-grid"><br></div>
+        <div class="split-side solar-side" id="p-solar">
+            <div class="z-10 text-center">
+                <div class="w-12 h-1 bg-yellow-400 mb-5 mx-auto rounded-full"><br></div>
+                <h1 class="text-4xl md:text-5xl font-800 mb-3 tracking-tight uppercase leading-tight">Solar<br><span class="text-yellow-400">Insight</span></h1>
+                <p class="text-gray-400 text-sm mb-6 side-desc lang-content" data-sv="Precisionsanalys av solpotential för fastigheter och stadsplanering." data-en="Precision analysis of solar potential for real estate and urban planning." data-es="Análisis de precisión del potencial solar para inmuebles y planificación urbana.">Precisionsanalys av solpotential för fastigheter och stadsplanering.</p>
+                <a href="#solar" class="cta-button side-cta inline-block border border-yellow-400 text-yellow-400 px-6 py-2.5 rounded-lg font-bold text-sm hover:bg-yellow-400 hover:text-black lang-content" data-sv="Utforska" data-en="Explore" data-es="Explorar">Utforska</a>
+            </div>
+        </div>
+        <div class="split-side water-side" id="p-water">
+            <div class="z-10 text-center">
+                <div class="w-12 h-1 bg-turquoise mb-5 mx-auto rounded-full"><br></div>
+                <h1 class="text-4xl md:text-5xl font-800 mb-3 tracking-tight uppercase leading-tight">Hydro<br><span class="text-turquoise">Blue</span></h1>
+                <p class="text-gray-400 text-sm mb-6 side-desc lang-content" data-sv="Blå-grön analys för hållbar dagvattenhantering och översvämningsskydd." data-en="Blue-green analysis for sustainable stormwater management and flood protection." data-es="Análisis azul-verde para gestión sostenible de aguas pluviales.">Blå-grön analys för hållbar dagvattenhantering och översvämningsskydd.</p>
+                <a href="#water" class="cta-button side-cta inline-block border border-turquoise text-turquoise px-6 py-2.5 rounded-lg font-bold text-sm hover:bg-turquoise hover:text-white lang-content" data-sv="Utforska" data-en="Explore" data-es="Explorar">Utforska</a>
+            </div>
+        </div>
+        <div class="split-side env-side" id="p-env">
+            <div class="z-10 text-center">
+                <div class="w-12 h-1 bg-green-400 mb-5 mx-auto rounded-full"><br></div>
+                <h1 class="text-4xl md:text-5xl font-800 mb-3 tracking-tight uppercase leading-tight">Miljö<br><span class="text-green-400">GIS</span></h1>
+                <p class="text-gray-400 text-sm mb-6 side-desc lang-content" data-sv="Kartläggning av ekosystem, biologisk mångfald och klimatrisker." data-en="Mapping of ecosystems, biodiversity and climate risks." data-es="Cartografía de ecosistemas, biodiversidad y riesgos climáticos.">Kartläggning av ekosystem, biologisk mångfald och klimatrisker.</p>
+                <a href="#miljogis" class="cta-button side-cta inline-block border border-green-400 text-green-400 px-6 py-2.5 rounded-lg font-bold text-sm hover:bg-green-400 hover:text-black lang-content" data-sv="Utforska" data-en="Explore" data-es="Explorar">Utforska</a>
+            </div>
+        </div>
+        <div class="split-side carbon-side" id="p-carbon">
+            <div class="z-10 text-center">
+                <div class="w-12 h-1 bg-emerald-400 mb-5 mx-auto rounded-full"><br></div>
+                <h1 class="text-4xl md:text-5xl font-800 mb-3 tracking-tight uppercase leading-tight">Kol &amp;<br><span class="text-emerald-400">Natur</span></h1>
+                <p class="text-gray-400 text-sm mb-6 side-desc lang-content" data-sv="Verifiering av kol- och naturkrediter för markägare och kommuner." data-en="Verification of carbon and nature credits for landowners and municipalities." data-es="Verificación de créditos de carbono y naturaleza.">Verifiering av kol- och naturkrediter för markägare och kommuner.</p>
+                <a href="#kol" class="cta-button side-cta inline-block border border-emerald-400 text-emerald-400 px-6 py-2.5 rounded-lg font-bold text-sm hover:bg-emerald-400 hover:text-black lang-content" data-sv="Utforska" data-en="Explore" data-es="Explorar">Utforska</a>
+            </div>
+        </div>
+        <div class="split-side ai-side" id="p-ai">
+            <div class="z-10 text-center">
+                <div class="w-12 h-1 bg-violet-400 mb-5 mx-auto rounded-full"><br></div>
+                <h1 class="text-4xl md:text-5xl font-800 mb-3 tracking-tight uppercase leading-tight">AI<br><span class="text-violet-400">Geo</span></h1>
+                <p class="text-gray-400 text-sm mb-6 side-desc lang-content" data-sv="AI-driven analys av satellitbilder och geospatial data i realtid." data-en="AI-powered analysis of satellite images and geospatial data in real time." data-es="Análisis con IA de imágenes satelitales y datos geoespaciales en tiempo real.">AI-driven analys av satellitbilder och geospatial data i realtid.</p>
+                <a href="#ai" class="cta-button side-cta inline-block border border-violet-400 text-violet-400 px-6 py-2.5 rounded-lg font-bold text-sm hover:bg-violet-400 hover:text-white lang-content" data-sv="Utforska" data-en="Explore" data-es="Explorar">Utforska</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- CONTENT SECTIONS -->
+    <section class="py-24 px-6 max-w-7xl mx-auto">
+
+        <!-- Solpotential -->
+        <div class="grid md:grid-cols-2 gap-16 items-center mb-16" id="solar">
+            <div class="scroll-reveal">
+                <h2 class="text-yellow-400 font-bold mb-2 uppercase tracking-tighter lang-content" data-sv="Solpotential" data-en="Solar Potential" data-es="Potencial Solar">Solpotential</h2>
+                <h3 class="text-4xl font-700 mb-6 lang-content" data-sv="Maximera energin från ovan." data-en="Maximize the energy from above." data-es="Maximiza la energía desde arriba.">Maximera energin från ovan.</h3>
+                <p class="text-gray-400 text-lg mb-6 leading-relaxed lang-content" data-sv="Vi använder avancerade LiDAR-data och 3D-modellering för att beräkna exakt solinstrålning på takytor och mark, med hänsyn till skuggning från vegetation och omgivande byggnader." data-en="We use advanced LiDAR data and 3D modeling to calculate exact solar radiation on roof surfaces and ground, accounting for shading from vegetation and surrounding buildings." data-es="Utilizamos datos LiDAR avanzados y modelado 3D para calcular la radiación solar exacta en superficies de techos y suelos.">Vi använder avancerade LiDAR-data och 3D-modellering för att beräkna exakt solinstrålning på takytor och mark, med hänsyn till skuggning från vegetation och omgivande byggnader.</p>
+            </div>
+            <div class="scroll-reveal img-container rounded-2xl overflow-hidden border border-slate-700">
+                <img src="soolpotential2.jpg" alt="Solpotential" class="w-full h-full object-cover">
+            </div>
+        </div>
+
+        <!-- ── INTERACTIVE SOLAR MAP ── -->
+        <div class="mb-32 scroll-reveal">
+            <div class="text-center mb-8">
+                <p class="text-yellow-400 font-bold text-xs uppercase tracking-widest mb-2 lang-content"
+                   data-sv="Interaktiv demokarta" data-en="Interactive demo map" data-es="Mapa demo interactivo">Interaktiv demokarta</p>
+                <h3 class="text-3xl font-bold text-white mb-3 lang-content"
+                    data-sv="Solpotential — Visby, Gotland"
+                    data-en="Solar Potential — Visby, Gotland"
+                    data-es="Potencial Solar — Visby, Gotland">Solpotential — Visby, Gotland</h3>
+                <p class="text-gray-400 lang-content"
+                   data-sv="Klicka på en zon för att se beräknad solinstrålning"
+                   data-en="Click a zone to see estimated solar radiation"
+                   data-es="Haz clic en una zona para ver la radiación solar estimada">Klicka på en zon för att se beräknad solinstrålning</p>
+            </div>
+            <div id="solar-map"></div>
+            <div class="flex gap-2 justify-center mt-5 flex-wrap">
+                <span class="text-xs bg-slate-800 text-gray-400 px-3 py-1 rounded-full border border-slate-700">Sentinel-2 (ESA Copernicus)</span>
+                <span class="text-xs bg-slate-800 text-gray-400 px-3 py-1 rounded-full border border-slate-700">LiDAR — Lantmäteriet</span>
+                <span class="text-xs bg-slate-800 text-gray-400 px-3 py-1 rounded-full border border-slate-700">QGIS / GDAL</span>
+            </div>
+        </div>
+
+        <!-- Vattenanalys -->
+        <div class="grid md:grid-cols-2 gap-16 items-center mb-32" id="water">
+            <div class="scroll-reveal order-2 md:order-1 img-container rounded-2xl overflow-hidden border border-slate-700">
+                <img src="vattenanalys.jpg" alt="Vattenanalys" class="w-full h-full object-cover">
+            </div>
+            <div class="scroll-reveal order-1 md:order-2">
+                <h2 class="text-turquoise font-bold mb-2 uppercase tracking-tighter lang-content" data-sv="Blå-Grön Analys" data-en="Blue-Green Analysis" data-es="Análisis Azul-Verde">Blå-Grön Analys</h2>
+                <h3 class="text-4xl font-700 mb-6 lang-content" data-sv="Planera för ett föränderligt klimat." data-en="Plan for a changing climate." data-es="Planificar para un clima cambiante.">Planera för ett föränderligt klimat.</h3>
+                <p class="text-gray-400 text-lg mb-6 leading-relaxed lang-content" data-sv="Våra hydro-analyser hjälper kommuner och exploatörer att förstå hur vatten rör sig i landskapet. Vi identifierar lågpunkter och optimerar placering av NBS." data-en="Our hydro analyses help municipalities and developers understand how water moves in the landscape. We identify low points and optimize the placement of NBS." data-es="Nuestros análisis hídricos ayudan a los municipios y promotores a comprender cómo se mueve el agua en el paisaje.">Våra hydro-analyser hjälper kommuner och exploatörer att förstå hur vatten rör sig i landskapet. Vi identifierar lågpunkter och optimerar placering av NBS.</p>
+            </div>
+        </div>
+
+        <!-- Miljö-GIS -->
+        <div class="grid md:grid-cols-2 gap-16 items-center mb-32" id="miljogis">
+            <div class="scroll-reveal">
+                <h2 class="text-green-400 font-bold mb-2 uppercase tracking-tighter lang-content" data-sv="Miljö-GIS" data-en="Environmental GIS" data-es="GIS Ambiental">Miljö-GIS</h2>
+                <h3 class="text-4xl font-700 mb-6 lang-content" data-sv="Förstå din mark. Skydda din framtid." data-en="Understand your land. Protect your future." data-es="Entiende tu tierra. Protege tu futuro.">Förstå din mark. Skydda din framtid.</h3>
+                <p class="text-gray-400 text-lg mb-6 leading-relaxed lang-content" data-sv="Vi hjälper kommuner, markägare och miljöorganisationer att kartlägga och analysera naturmiljöer med GIS. Från skogar och våtmarker till kuster och stadsgrönska — vi omvandlar komplex geografisk data till tydliga beslutsunderlag." data-en="We help municipalities, landowners and environmental organisations map and analyse natural environments using GIS. From forests and wetlands to coastlines and urban green spaces — we turn complex geographic data into clear decision-making tools." data-es="Ayudamos a municipios, propietarios de tierras y organizaciones ambientales a mapear y analizar entornos naturales con SIG.">Vi hjälper kommuner, markägare och miljöorganisationer att kartlägga och analysera naturmiljöer med GIS. Från skogar och våtmarker till kuster och stadsgrönska — vi omvandlar komplex geografisk data till tydliga beslutsunderlag.</p>
+            </div>
+            <div class="scroll-reveal bg-slate-800/50 rounded-2xl border border-slate-700 p-10 flex flex-col gap-5">
+                <div class="flex items-center gap-4"><div class="w-9 h-9 rounded-full bg-green-400/20 flex items-center justify-center text-lg">🌿</div><p class="text-gray-300 lang-content" data-sv="Kartläggning av ekosystem och biologisk mångfald" data-en="Ecosystem and biodiversity mapping" data-es="Cartografía de ecosistemas y biodiversidad">Kartläggning av ekosystem och biologisk mångfald</p></div>
+                <div class="flex items-center gap-4"><div class="w-9 h-9 rounded-full bg-green-400/20 flex items-center justify-center text-lg">🗺️</div><p class="text-gray-300 lang-content" data-sv="Klimatriskanalys och sårbarhetskartering" data-en="Climate risk analysis and vulnerability mapping" data-es="Análisis de riesgo climático">Klimatriskanalys och sårbarhetskartering</p></div>
+                <div class="flex items-center gap-4"><div class="w-9 h-9 rounded-full bg-green-400/20 flex items-center justify-center text-lg">📡</div><p class="text-gray-300 lang-content" data-sv="Satellitbildsanalys och fjärranalys" data-en="Satellite image analysis and remote sensing" data-es="Análisis de imágenes satelitales">Satellitbildsanalys och fjärranalys</p></div>
+                <div class="flex items-center gap-4"><div class="w-9 h-9 rounded-full bg-green-400/20 flex items-center justify-center text-lg">🌍</div><p class="text-gray-300 lang-content" data-sv="Internationella uppdrag och fältarbete" data-en="International assignments and fieldwork" data-es="Misiones internacionales">Internationella uppdrag och fältarbete</p></div>
+            </div>
+        </div>
+
+        <!-- Kol & Naturkrediter -->
+        <div class="grid md:grid-cols-2 gap-16 items-center mb-32" id="kol">
+            <div class="scroll-reveal bg-slate-800/50 rounded-2xl border border-emerald-900/50 p-10 flex flex-col gap-5">
+                <div class="flex items-center gap-4"><div class="w-9 h-9 rounded-full bg-emerald-400/20 flex items-center justify-center text-lg">🌳</div><p class="text-gray-300 lang-content" data-sv="Verifiering av kolupptag i skog och mark" data-en="Verification of carbon sequestration in forests and land" data-es="Verificación de secuestro de carbono">Verifiering av kolupptag i skog och mark</p></div>
+                <div class="flex items-center gap-4"><div class="w-9 h-9 rounded-full bg-emerald-400/20 flex items-center justify-center text-lg">💧</div><p class="text-gray-300 lang-content" data-sv="Kartläggning av våtmarker och naturvärden" data-en="Mapping of wetlands and nature values" data-es="Cartografía de humedales y valores naturales">Kartläggning av våtmarker och naturvärden</p></div>
+                <div class="flex items-center gap-4"><div class="w-9 h-9 rounded-full bg-emerald-400/20 flex items-center justify-center text-lg">📊</div><p class="text-gray-300 lang-content" data-sv="Rapporter och certifiering för kreditmarknaden" data-en="Reports and certification for the credit market" data-es="Informes y certificación para el mercado de créditos">Rapporter och certifiering för kreditmarknaden</p></div>
+                <div class="flex items-center gap-4"><div class="w-9 h-9 rounded-full bg-emerald-400/20 flex items-center justify-center text-lg">🤝</div><p class="text-gray-300 lang-content" data-sv="Rådgivning till markägare och kommuner" data-en="Advisory services for landowners and municipalities" data-es="Servicios de asesoramiento">Rådgivning till markägare och kommuner</p></div>
+            </div>
+            <div class="scroll-reveal">
+                <h2 class="text-emerald-400 font-bold mb-2 uppercase tracking-tighter lang-content" data-sv="Kol &amp; Naturkrediter" data-en="Carbon &amp; Nature Credits" data-es="Créditos de Carbono y Naturaleza">Kol &amp; Naturkrediter</h2>
+                <h3 class="text-4xl font-700 mb-6 lang-content" data-sv="Din mark kan vara mer värd än du tror." data-en="Your land could be worth more than you think." data-es="Tu tierra podría valer más de lo que crees.">Din mark kan vara mer värd än du tror.</h3>
+                <p class="text-gray-400 text-lg mb-6 leading-relaxed lang-content" data-sv="Kol- och naturkrediter är en snabbväxande marknad där markägare kan få betalt för att bevara och återställa natur. Vi använder GIS och satellitdata för att mäta, verifiera och dokumentera naturens värden." data-en="Carbon and nature credits are a fast-growing market where landowners get paid for preserving and restoring nature. We use GIS and satellite data to measure, verify and document nature's values." data-es="Los créditos de carbono son un mercado en rápido crecimiento. Usamos SIG y datos satelitales para medir y verificar los valores naturales.">Kol- och naturkrediter är en snabbväxande marknad där markägare kan få betalt för att bevara och återställa natur. Vi använder GIS och satellitdata för att mäta, verifiera och dokumentera naturens värden.</p>
+            </div>
+        </div>
+
+        <!-- AI-Geospatial -->
+        <div class="grid md:grid-cols-2 gap-16 items-center mb-32" id="ai">
+            <div class="scroll-reveal">
+                <h2 class="text-violet-400 font-bold mb-2 uppercase tracking-tighter lang-content" data-sv="AI-Driven Geospatial" data-en="AI-Powered Geospatial" data-es="Geoespacial con IA">AI-Driven Geospatial</h2>
+                <h3 class="text-4xl font-700 mb-6 lang-content" data-sv="Framtidens kartanalys — redan idag." data-en="The future of map analysis — available today." data-es="El futuro del análisis de mapas — disponible hoy.">Framtidens kartanalys — redan idag.</h3>
+                <p class="text-gray-400 text-lg mb-6 leading-relaxed lang-content" data-sv="Vi kombinerar artificiell intelligens med geospatial data för att automatiskt analysera satellitbilder, spåra miljöförändringar och generera prediktiva kartor. Perfekt för organisationer som vill ligga i framkant inom miljöövervakning och klimatanpassning." data-en="We combine artificial intelligence with geospatial data to automatically analyse satellite images, track environmental changes and generate predictive maps. Perfect for organisations wanting to lead the way in environmental monitoring and climate adaptation." data-es="Combinamos IA con datos geoespaciales para analizar automáticamente imágenes satelitales y generar mapas predictivos.">Vi kombinerar artificiell intelligens med geospatial data för att automatiskt analysera satellitbilder, spåra miljöförändringar och generera prediktiva kartor. Perfekt för organisationer som vill ligga i framkant inom miljöövervakning och klimatanpassning.</p>
+            </div>
+            <div class="scroll-reveal bg-slate-800/50 rounded-2xl border border-violet-900/50 p-10 flex flex-col gap-5">
+                <div class="flex items-center gap-4"><div class="w-9 h-9 rounded-full bg-violet-400/20 flex items-center justify-center text-lg">🛰️</div><p class="text-gray-300 lang-content" data-sv="Automatisk analys av satellitbilder med AI" data-en="Automatic satellite image analysis with AI" data-es="Análisis automático de imágenes satelitales con IA">Automatisk analys av satellitbilder med AI</p></div>
+                <div class="flex items-center gap-4"><div class="w-9 h-9 rounded-full bg-violet-400/20 flex items-center justify-center text-lg">📈</div><p class="text-gray-300 lang-content" data-sv="Prediktiv modellering av klimat och markanvändning" data-en="Predictive modelling of climate and land use" data-es="Modelado predictivo de clima y uso del suelo">Prediktiv modellering av klimat och markanvändning</p></div>
+                <div class="flex items-center gap-4"><div class="w-9 h-9 rounded-full bg-violet-400/20 flex items-center justify-center text-lg">🔍</div><p class="text-gray-300 lang-content" data-sv="Automatisk detektering av avskogning och markövervakning" data-en="Automatic detection of deforestation and land monitoring" data-es="Detección automática de deforestación">Automatisk detektering av avskogning och markövervakning</p></div>
+                <div class="flex items-center gap-4"><div class="w-9 h-9 rounded-full bg-violet-400/20 flex items-center justify-center text-lg">⚡</div><p class="text-gray-300 lang-content" data-sv="Snabba, skalbara lösningar för stora datamängder" data-en="Fast, scalable solutions for large datasets" data-es="Soluciones rápidas y escalables">Snabba, skalbara lösningar för stora datamängder</p></div>
+            </div>
+        </div>
+
+        <!-- Projekt -->
+        <div class="mb-32" id="projekt">
+            <div class="scroll-reveal text-center mb-16">
+                <h2 class="text-yellow-400 font-bold mb-2 uppercase tracking-tighter lang-content" data-sv="Projekt" data-en="Projects" data-es="Proyectos">Projekt</h2>
+                <h3 class="text-4xl font-700 lang-content" data-sv="Vad vi har gjort." data-en="What we have done." data-es="Lo que hemos hecho.">Vad vi har gjort.</h3>
+            </div>
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <div class="scroll-reveal bg-slate-800/50 rounded-2xl border border-slate-700 overflow-hidden hover:border-yellow-400/50 transition-colors group">
+                    <div class="h-48 bg-gradient-to-br from-yellow-400/20 to-slate-900 flex items-center justify-center relative overflow-hidden">
+                        <div class="absolute inset-0 opacity-10" style="background-image:radial-gradient(circle,rgba(251,191,36,0.4) 1px,transparent 1px);background-size:20px 20px"><br></div>
+                        <div class="text-center z-10"><div class="text-5xl mb-2">☀️</div><div class="text-yellow-400 font-bold text-sm uppercase tracking-widest">Malmö stad</div></div>
+                    </div>
+                    <div class="p-6">
+                        <div class="flex gap-2 mb-3 flex-wrap"><span class="text-xs bg-yellow-400/10 text-yellow-400 px-2 py-1 rounded-full">Solpotential</span><span class="text-xs bg-slate-700 text-gray-400 px-2 py-1 rounded-full">LiDAR</span><span class="text-xs bg-slate-700 text-gray-400 px-2 py-1 rounded-full">QGIS</span></div>
+                        <h4 class="text-white font-bold text-lg mb-2 lang-content" data-sv="Solpotentialkartering — Malmö stad" data-en="Solar Potential Mapping — Malmö City" data-es="Cartografía de Potencial Solar — Ciudad de Malmö">Solpotentialkartering — Malmö stad</h4>
+                        <p class="text-gray-400 text-sm leading-relaxed lang-content" data-sv="Kartläggning av 12 000 takytor med LiDAR-data och 3D-skuggningsanalys. Resultatet visade att 34% av taken hade utmärkt solpotential, vilket ledde till en kommunal solcellsstrategi." data-en="Mapping of 12,000 roof surfaces using LiDAR data and 3D shadow analysis. Results showed 34% of roofs had excellent solar potential, leading to a municipal solar panel strategy." data-es="Cartografía de 12.000 superficies de tejado con datos LiDAR y análisis de sombras 3D.">Kartläggning av 12 000 takytor med LiDAR-data och 3D-skuggningsanalys. Resultatet visade att 34% av taken hade utmärkt solpotential, vilket ledde till en kommunal solcellsstrategi.</p>
+                    </div>
+                </div>
+                <div class="scroll-reveal bg-slate-800/50 rounded-2xl border border-slate-700 overflow-hidden hover:border-turquoise/50 transition-colors group">
+                    <div class="h-48 bg-gradient-to-br from-cyan-400/20 to-slate-900 flex items-center justify-center relative overflow-hidden">
+                        <div class="absolute inset-0 opacity-10" style="background-image:radial-gradient(circle,rgba(6,182,212,0.4) 1px,transparent 1px);background-size:20px 20px"><br></div>
+                        <div class="text-center z-10"><div class="text-5xl mb-2">🌊</div><div class="text-turquoise font-bold text-sm uppercase tracking-widest">Uppsala kommun</div></div>
+                    </div>
+                    <div class="p-6">
+                        <div class="flex gap-2 mb-3 flex-wrap"><span class="text-xs bg-cyan-400/10 text-cyan-400 px-2 py-1 rounded-full">Hydro Blue</span><span class="text-xs bg-slate-700 text-gray-400 px-2 py-1 rounded-full">LiDAR</span><span class="text-xs bg-slate-700 text-gray-400 px-2 py-1 rounded-full">GIS</span></div>
+                        <h4 class="text-white font-bold text-lg mb-2 lang-content" data-sv="Översvämningsrisk — Uppsala centrum" data-en="Flood Risk Analysis — Uppsala City Centre" data-es="Análisis de Riesgo de Inundación — Centro de Uppsala">Översvämningsrisk — Uppsala centrum</h4>
+                        <p class="text-gray-400 text-sm leading-relaxed lang-content" data-sv="Hydrologisk modellering av ett 8 km² stadsområde efter 100-årsregn. Identifierade 23 kritiska lågpunkter och föreslog NBS-åtgärder som minskade skaderisk med uppskattade 40%." data-en="Hydrological modelling of an 8 km² urban area following a 100-year rainfall event. Identified 23 critical low points and proposed NBS measures reducing damage risk by an estimated 40%." data-es="Modelado hidrológico de un área urbana de 8 km² tras lluvias de período de retorno de 100 años.">Hydrologisk modellering av ett 8 km² stadsområde efter 100-årsregn. Identifierade 23 kritiska lågpunkter och föreslog NBS-åtgärder som minskade skaderisk med uppskattade 40%.</p>
+                    </div>
+                </div>
+                <div class="scroll-reveal bg-slate-800/50 rounded-2xl border border-slate-700 overflow-hidden hover:border-green-400/50 transition-colors group">
+                    <div class="h-48 bg-gradient-to-br from-green-400/20 to-slate-900 flex items-center justify-center relative overflow-hidden">
+                        <div class="absolute inset-0 opacity-10" style="background-image:radial-gradient(circle,rgba(74,222,128,0.4) 1px,transparent 1px);background-size:20px 20px"><br></div>
+                        <div class="text-center z-10"><div class="text-5xl mb-2">🌿</div><div class="text-green-400 font-bold text-sm uppercase tracking-widest">Tyresta nationalpark</div></div>
+                    </div>
+                    <div class="p-6">
+                        <div class="flex gap-2 mb-3 flex-wrap"><span class="text-xs bg-green-400/10 text-green-400 px-2 py-1 rounded-full">Miljö-GIS</span><span class="text-xs bg-slate-700 text-gray-400 px-2 py-1 rounded-full">Sentinel-2</span><span class="text-xs bg-slate-700 text-gray-400 px-2 py-1 rounded-full">Artportalen</span></div>
+                        <h4 class="text-white font-bold text-lg mb-2 lang-content" data-sv="Ekosystemkartläggning — Tyresta nationalpark" data-en="Ecosystem Mapping — Tyresta National Park" data-es="Cartografía de Ecosistemas — Parque Nacional de Tyresta">Ekosystemkartläggning — Tyresta nationalpark</h4>
+                        <p class="text-gray-400 text-sm leading-relaxed lang-content" data-sv="Kartläggning av naturtyper och biologisk mångfald med Sentinel-2-satellitbilder kombinerat med artdata från Artportalen. Identifierade 6 rödlistade habitattyper och levererade GIS-underlag för bevarandeplan." data-en="Mapping of habitat types and biodiversity using Sentinel-2 satellite imagery combined with species data from Artportalen. Identified 6 red-listed habitat types and delivered GIS data for conservation plan." data-es="Cartografía de tipos de hábitat y biodiversidad con imágenes satelitales Sentinel-2 combinadas con datos de especies.">Kartläggning av naturtyper och biologisk mångfald med Sentinel-2-satellitbilder kombinerat med artdata från Artportalen. Identifierade 6 rödlistade habitattyper och levererade GIS-underlag för bevarandeplan.</p>
+                    </div>
+                </div>
+                <div class="scroll-reveal bg-slate-800/50 rounded-2xl border border-slate-700 overflow-hidden hover:border-emerald-400/50 transition-colors group">
+                    <div class="h-48 bg-gradient-to-br from-emerald-400/20 to-slate-900 flex items-center justify-center relative overflow-hidden">
+                        <div class="absolute inset-0 opacity-10" style="background-image:radial-gradient(circle,rgba(16,185,129,0.4) 1px,transparent 1px);background-size:20px 20px"></div>
+                        <div class="text-center z-10"><div class="text-5xl mb-2">🌳</div><div class="text-emerald-400 font-bold text-sm uppercase tracking-widest">Privat skogsägare, Jämtland</div></div>
+                    </div>
+                    <div class="p-6">
+                        <div class="flex gap-2 mb-3 flex-wrap"><span class="text-xs bg-emerald-400/10 text-emerald-400 px-2 py-1 rounded-full">Kol &amp; Natur</span><span class="text-xs bg-slate-700 text-gray-400 px-2 py-1 rounded-full">Satellitdata</span><span class="text-xs bg-slate-700 text-gray-400 px-2 py-1 rounded-full">Certifiering</span></div>
+                        <h4 class="text-white font-bold text-lg mb-2 lang-content" data-sv="Kolkreditverifiering — Norrländsk skogsmark" data-en="Carbon Credit Verification — Northern Swedish Forest" data-es="Verificación de Créditos de Carbono — Bosque del Norte de Suecia">Kolkreditverifiering — Norrländsk skogsmark</h4>
+                        <p class="text-gray-400 text-sm leading-relaxed lang-content" data-sv="Verifiering av kolupptag på 340 hektar skogsmark i Jämtland med hjälp av satellitdata och fältinventering. Kunden fick certifiering för 1 850 ton CO2 per år, värt ca 370 000 kr på kreditmarknaden." data-en="Verification of carbon sequestration on 340 hectares of forest in Jämtland using satellite data and field surveys. Client received certification for 1,850 tonnes CO2 per year, worth approx. SEK 370,000 on the credit market." data-es="Verificación de secuestro de carbono en 340 hectáreas de bosque en Jämtland.">Verifiering av kolupptag på 340 hektar skogsmark i Jämtland med hjälp av satellitdata och fältinventering. Kunden fick certifiering för 1 850 ton CO2 per år, värt ca 370 000 kr på kreditmarknaden.</p>
+                    </div>
+                </div>
+                <div class="scroll-reveal bg-slate-800/50 rounded-2xl border border-slate-700 overflow-hidden hover:border-violet-400/50 transition-colors group">
+                    <div class="h-48 bg-gradient-to-br from-violet-400/20 to-slate-900 flex items-center justify-center relative overflow-hidden">
+                        <div class="absolute inset-0 opacity-10" style="background-image:radial-gradient(circle,rgba(167,139,250,0.4) 1px,transparent 1px);background-size:20px 20px"></div>
+                        <div class="text-center z-10"><div class="text-5xl mb-2">🛰️</div><div class="text-violet-400 font-bold text-sm uppercase tracking-widest">Brasilien / Internationellt</div></div>
+                    </div>
+                    <div class="p-6">
+                        <div class="flex gap-2 mb-3 flex-wrap"><span class="text-xs bg-violet-400/10 text-violet-400 px-2 py-1 rounded-full">AI-Geo</span><span class="text-xs bg-slate-700 text-gray-400 px-2 py-1 rounded-full">Sentinel-2</span><span class="text-xs bg-slate-700 text-gray-400 px-2 py-1 rounded-full">Machine Learning</span></div>
+                        <h4 class="text-white font-bold text-lg mb-2 lang-content" data-sv="AI-detektering av avskogning — Amazonas" data-en="AI Deforestation Detection — Amazon" data-es="Detección de Deforestación con IA — Amazonas">AI-detektering av avskogning — Amazonas</h4>
+                        <p class="text-gray-400 text-sm leading-relaxed lang-content" data-sv="Automatisk detektering av avskogning i ett 50 000 km² område i Brasilien med maskininlärning och Sentinel-2. Systemet identifierade nya avskogningshändelser med 94% noggrannhet, 3 veckor snabbare än manuell övervakning." data-en="Automatic deforestation detection across a 50,000 km² area in Brazil using machine learning and Sentinel-2. The system identified new deforestation events with 94% accuracy, 3 weeks faster than manual monitoring." data-es="Detección automática de deforestación en un área de 50.000 km² en Brasil con aprendizaje automático y Sentinel-2.">Automatisk detektering av avskogning i ett 50 000 km² område i Brasilien med maskininlärning och Sentinel-2. Systemet identifierade nya avskogningshändelser med 94% noggrannhet, 3 veckor snabbare än manuell övervakning.</p>
+                    </div>
+                </div>
+                <div class="scroll-reveal bg-gradient-to-br from-slate-800/50 to-slate-900/80 rounded-2xl border border-slate-600 overflow-hidden flex items-center justify-center p-8 text-center">
+                    <div>
+                        <div class="text-4xl mb-4">🌍</div>
+                        <h4 class="text-white font-bold text-lg mb-3 lang-content" data-sv="Ditt projekt här?" data-en="Your project here?" data-es="¿Tu proyecto aquí?">Ditt projekt här?</h4>
+                        <p class="text-gray-400 text-sm mb-6 lang-content" data-sv="Vi tar nya uppdrag inom GIS, miljöanalys och AI-geospatial." data-en="We take on new projects in GIS, environmental analysis and AI-geospatial." data-es="Aceptamos nuevos proyectos en SIG, análisis ambiental e IA geoespacial.">Vi tar nya uppdrag inom GIS, miljöanalys och AI-geospatial.</p>
+                        <a href="#contact-me" class="cta-button inline-block bg-yellow-400 text-black px-6 py-3 rounded-lg font-bold text-sm hover:bg-yellow-300 lang-content" data-sv="Kontakta oss" data-en="Contact us" data-es="Contáctanos">Kontakta oss</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Om GeoTeka -->
+        <div class="scroll-reveal mb-32" id="about">
+            <div class="grid md:grid-cols-2 gap-16 items-center">
+                <div>
+                    <h2 class="text-green-400 font-bold mb-2 uppercase tracking-tighter lang-content" data-sv="Om GeoTeka" data-en="About GeoTeka" data-es="Sobre GeoTeka">Om GeoTeka</h2>
+                    <h3 class="text-4xl font-700 mb-6 lang-content" data-sv="Geodata med ett syfte." data-en="Geodata with a purpose." data-es="Geodatos con un propósito.">Geodata med ett syfte.</h3>
+                    <p class="text-gray-400 text-lg mb-6 leading-relaxed lang-content" data-sv="GeoTeka är en svensk geospatial konsultbyrå med fokus på miljöanalys, GIS och datadriven rådgivning för en värld i förändring." data-en="GeoTeka is a Swedish geospatial consultancy focused on environmental analysis, GIS and data-driven insights for a changing world." data-es="GeoTeka es una consultoría geoespacial sueca enfocada en análisis ambiental, SIG y asesoramiento basado en datos.">GeoTeka är en svensk geospatial konsultbyrå med fokus på miljöanalys, GIS och datadriven rådgivning för en värld i förändring.</p>
+                    <p class="text-gray-400 text-lg mb-6 leading-relaxed lang-content" data-sv="Företaget grundades av Emma, mätningstekniker med ett brinnande intresse för miljö och modern teknik. Vi kombinerar avancerade geografiska dataverktyg med praktisk miljökunskap — för att hjälpa kommuner, exploatörer och organisationer att förstå sin mark, sina risker och sina möjligheter." data-en="Founded by Emma, a surveying technician with a passion for the environment and modern technology. We combine advanced geospatial tools with practical environmental knowledge — helping municipalities, developers and organisations understand their land, their risks and their opportunities." data-es="Fundada por Emma, técnica en medición con pasión por el medio ambiente y la tecnología moderna.">Företaget grundades av Emma, mätningstekniker med ett brinnande intresse för miljö och modern teknik. Vi kombinerar avancerade geografiska dataverktyg med praktisk miljökunskap — för att hjälpa kommuner, exploatörer och organisationer att förstå sin mark, sina risker och sina möjligheter.</p>
+                    <p class="text-gray-400 text-lg leading-relaxed lang-content" data-sv="Vi verkar i hela Sverige och internationellt, eftersom miljöutmaningarna inte stannar vid landsgränsen." data-en="We operate across Sweden and internationally, because environmental challenges don't stop at borders." data-es="Operamos en toda Suecia e internacionalmente, porque los desafíos ambientales no se detienen en las fronteras.">Vi verkar i hela Sverige och internationellt, eftersom miljöutmaningarna inte stannar vid landsgränsen.</p>
+                </div>
+                <div class="grid grid-cols-2 gap-5">
+                    <div class="bg-slate-800/50 rounded-2xl p-6 border border-slate-700 text-center scroll-reveal"><div class="text-yellow-400 text-3xl font-bold mb-2">GIS</div><p class="text-gray-400 text-sm lang-content" data-sv="Geospatial analys" data-en="Geospatial analysis" data-es="Análisis geoespacial">Geospatial analys</p></div>
+                    <div class="bg-slate-800/50 rounded-2xl p-6 border border-slate-700 text-center scroll-reveal"><div class="text-turquoise text-3xl font-bold mb-2">AI</div><p class="text-gray-400 text-sm lang-content" data-sv="AI-driven analys" data-en="AI-powered analysis" data-es="Análisis con IA">AI-driven analys</p></div>
+                    <div class="bg-slate-800/50 rounded-2xl p-6 border border-slate-700 text-center scroll-reveal"><div class="text-green-400 text-3xl font-bold mb-2">CO₂</div><p class="text-gray-400 text-sm lang-content" data-sv="Kol- &amp; naturkrediter" data-en="Carbon &amp; nature credits" data-es="Créditos de carbono">Kol- &amp; naturkrediter</p></div>
+                    <div class="bg-slate-800/50 rounded-2xl p-6 border border-slate-700 text-center scroll-reveal"><div class="text-yellow-400 text-3xl font-bold mb-2">🌍</div><p class="text-gray-400 text-sm lang-content" data-sv="Internationellt" data-en="International" data-es="Internacional">Internationellt</p></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Kontakt -->
+        <div class="scroll-reveal bg-slate-900/50 rounded-3xl p-12 border border-slate-800 text-center" id="contact-me">
+            <h2 class="text-white font-bold mb-2 uppercase tracking-tighter lang-content" data-sv="Kontakta mig" data-en="Contact Me" data-es="Contáctame">Kontakta mig</h2>
+            <h3 class="text-3xl font-700 mb-8 lang-content" data-sv="Låt oss diskutera ert nästa projekt" data-en="Let's discuss your next project" data-es="Hablemos de su próximo proyecto">Låt oss diskutera ert nästa projekt</h3>
+            <div class="flex flex-col md:flex-row justify-center gap-8 md:gap-16 items-center">
+                <div class="flex flex-col items-center">
+                    <p class="text-gray-400 text-sm uppercase tracking-widest mb-1 lang-content" data-sv="E-post" data-en="Email" data-es="Correo">E-post</p>
+                    <a href="mailto:emma@geoteka.se" class="text-xl font-semibold hover:text-turquoise transition-colors">emma@geoteka.se</a>
+                </div>
+                <div class="flex flex-col items-center">
+                    <p class="text-gray-400 text-sm uppercase tracking-widest mb-1 lang-content" data-sv="Telefon" data-en="Phone" data-es="Teléfono">Telefon</p>
+                    <a href="tel:+46793070184" class="text-xl font-semibold hover:text-yellow-400 transition-colors">+46 79-307 01 84</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="border-t border-slate-800 py-12 px-6">
+        <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-8">
+            <div class="text-xl font-800 tracking-tighter"><span class="text-yellow-400">Geo</span>Teka<span class="text-turquoise">.se</span></div>
+            <div class="text-gray-500 text-sm">© 2025 GeoTeka Analys AB.</div>
+        </div>
+    </footer>
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script>
+        gsap.registerPlugin(ScrollTrigger);
+
+        // ── Language ──
+        function changeLang(lang) {
+            document.querySelectorAll('.lang-content').forEach(el => {
+                el.innerText = el.getAttribute('data-' + lang);
+            });
+            document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
+            document.getElementById('btn-' + lang).classList.add('active');
+            document.documentElement.lang = lang;
+        }
+
+        // ── Hero panels ──
+        const panels = ['p-solar','p-water','p-env','p-carbon','p-ai'];
+
+        function expandPanel(id) {
+            panels.forEach(pid => {
+                const el = document.getElementById(pid);
+                if (pid === id) {
+                    gsap.to(el, { flex: 2.2, duration: 0.5, ease: 'power2.out' });
+                    el.classList.add('active');
+                } else {
+                    gsap.to(el, { flex: 0.7, duration: 0.5, ease: 'power2.out' });
+                    el.classList.remove('active');
+                }
+            });
+        }
+
+        function resetPanels() {
+            panels.forEach(pid => {
+                const el = document.getElementById(pid);
+                gsap.to(el, { flex: 1, duration: 0.5, ease: 'power2.out' });
+                el.classList.remove('active');
+            });
+        }
+
+        window.onload = function() {
+            // Entrance animation
+            const tl = gsap.timeline();
+            tl.from('nav', { y: -80, opacity: 0, duration: 0.9, ease: 'power4.out' });
+            panels.forEach((pid, i) => {
+                tl.from('#' + pid + ' .z-10', { y: 40, opacity: 0, duration: 0.6 }, i === 0 ? '-=0.4' : '-=0.45');
+            });
+
+            // Hover
+            panels.forEach(pid => {
+                const el = document.getElementById(pid);
+                el.addEventListener('mouseenter', () => expandPanel(pid));
+            });
+            document.getElementById('hero').addEventListener('mouseleave', resetPanels);
+
+            // Scroll reveal
+            document.querySelectorAll('.scroll-reveal').forEach(el => {
+                gsap.to(el, {
+                    scrollTrigger: { trigger: el, start: 'top 85%' },
+                    opacity: 1, y: 0, duration: 1, ease: 'power3.out'
+                });
+            });
+
+            // ── Solar Map ──
+            var solarMap = L.map('solar-map').setView([57.628, 18.297], 12);
+
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+                maxZoom: 18
+            }).addTo(solarMap);
+
+            var colorMap = {
+                'Mycket hög': '#e31a1c',
+                'Hög':        '#ff7f00',
+                'Medel':      '#ffd700',
+                'Låg':        '#74c476'
+            };
+
+            var kwhRanges = {
+                'Mycket hög': '1 100–1 200 kWh/m²/år',
+                'Hög':        '1 000–1 100 kWh/m²/år',
+                'Medel':      '850–1 000 kWh/m²/år',
+                'Låg':        '700–850 kWh/m²/år'
+            };
+
+            var startLat = 57.608, startLng = 18.252;
+            var dLat = 0.010, dLng = 0.018;
+
+            var gridData = [
+                ['Hög',   'Hög',        'Mycket hög', 'Hög',  'Medel'],
+                ['Medel', 'Mycket hög', 'Hög',        'Hög',  'Medel'],
+                ['Låg',   'Medel',      'Hög',        'Hög',  'Låg'  ],
+                ['Låg',   'Låg',        'Medel',      'Hög',  'Medel']
+            ];
+
+            var features = [];
+            gridData.forEach(function(row, r) {
+                row.forEach(function(potential, c) {
+                    var s = startLat + r * dLat, n = s + dLat;
+                    var w = startLng + c * dLng, e = w + dLng;
+                    features.push({
+                        type: 'Feature',
+                        properties: { potential: potential },
+                        geometry: { type: 'Polygon', coordinates: [[[w,s],[e,s],[e,n],[w,n],[w,s]]] }
+                    });
+                });
+            });
+
+            L.geoJSON({ type: 'FeatureCollection', features: features }, {
+                style: function(f) {
+                    return { fillColor: colorMap[f.properties.potential], fillOpacity: 0.55, color: '#fff', weight: 1.5 };
+                },
+                onEachFeature: function(f, layer) {
+                    var p = f.properties.potential;
+                    layer.bindPopup(
+                        '<strong style="color:#111">Solpotential: ' + p + '</strong><br>' +
+                        '<span style="color:#444">' + kwhRanges[p] + '</span><br>' +
+                        '<small style="color:#888">Sentinel-2 + LiDAR-höjdmodell</small>'
+                    );
+                    layer.on('mouseover', function() { this.setStyle({ fillOpacity: 0.8 }); });
+                    layer.on('mouseout',  function() { this.setStyle({ fillOpacity: 0.55 }); });
+                }
+            }).addTo(solarMap);
+
+            var legend = L.control({ position: 'bottomright' });
+            legend.onAdd = function() {
+                var div = L.DomUtil.create('div', 'solar-map-legend');
+                div.innerHTML = '<h4>Solpotential</h4>' +
+                    Object.keys(colorMap).map(function(label) {
+                        return '<div class="legend-row"><div class="legend-dot" style="background:' +
+                            colorMap[label] + '"></div><span>' + label + '</span></div>';
+                    }).join('');
+                return div;
+            };
+            legend.addTo(solarMap);
+        };
+    </script>
+
+</body></html>
