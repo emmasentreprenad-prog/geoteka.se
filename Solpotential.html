@@ -1,8 +1,8 @@
-{% include nav.html %}
 <!DOCTYPE html>
 <html lang="sv">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Solpotentialanalys – GeoTeka</title>
   <link rel="stylesheet" href="style.css">
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
@@ -14,7 +14,6 @@
       box-shadow: 0 4px 20px rgba(0,0,0,0.12);
       margin: 2rem 0;
     }
-
     .map-legend {
       background: white;
       padding: 1rem 1.25rem;
@@ -24,18 +23,8 @@
       color: #0f4f4a;
       line-height: 1.8;
     }
-
-    .map-legend h4 {
-      margin: 0 0 0.5rem;
-      font-size: 0.9rem;
-    }
-
-    .legend-item {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-
+    .map-legend h4 { margin: 0 0 0.5rem; font-size: 0.9rem; }
+    .legend-item { display: flex; align-items: center; gap: 8px; }
     .legend-swatch {
       width: 16px;
       height: 16px;
@@ -43,7 +32,6 @@
       flex-shrink: 0;
       border: 1px solid rgba(0,0,0,0.2);
     }
-
     .map-info-box {
       background: #f0f8f7;
       border-left: 4px solid #0f4f4a;
@@ -52,14 +40,12 @@
       margin: 1.5rem 0;
       font-size: 0.92rem;
     }
-
     .data-sources {
       display: flex;
       gap: 0.6rem;
       flex-wrap: wrap;
       margin-top: 0.75rem;
     }
-
     .data-tag {
       background: #0f4f4a;
       color: white;
@@ -146,9 +132,8 @@
     "Låg":        "700–850 kWh/m²/år"
   };
 
-  // 5 columns × 4 rows covering ~5×4 km around Visby
   const startLat = 57.608, startLng = 18.252;
-  const dLat = 0.010,      dLng     = 0.018;
+  const dLat = 0.010, dLng = 0.018;
 
   const gridData = [
     ["Hög",   "Hög",       "Mycket hög", "Hög",  "Medel"],
@@ -196,7 +181,6 @@
     }
   }).addTo(map);
 
-  // Legend control
   var legend = L.control({ position: "bottomright" });
   legend.onAdd = function() {
     var div = L.DomUtil.create("div", "map-legend");
