@@ -1,20 +1,54 @@
----
----
 <!DOCTYPE html>
 <html lang="sv">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Tjänster | GeoTeka</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-{% include nav.html %}
+<nav class="main-nav">
+  <ul>
+    <li><a href="index.html">Hem</a></li>
+    <li class="dropdown">
+      <a href="Tjanster.html">Tjänster</a>
+      <ul class="dropdown-menu">
+        <li><a href="Solpotential.html">Solpotentialanalys</a></li>
+        <li><a href="Vattenanalys.html">Grönt &amp; blått vatten</a></li>
+      </ul>
+    </li>
+    <li><a href="Kontakt.html">Kontakt</a></li>
+  </ul>
+</nav>
 
-<main class="page-text">
-  <h1>Tjänster</h1>
-  <p>GeoTeka erbjuder GIS-baserade analyser för solenergi och vattenresurser.</p>
-</main>
+<section>
+  <h2>Tjänster</h2>
+  <p>
+    GeoTeka erbjuder GIS-baserade analyser för solenergi, vattenresurser och
+    hållbar geografisk planering.
+  </p>
+
+  <div class="service-grid">
+    <article class="service-card">
+      <h3>Solpotentialanalys</h3>
+      <p>
+        Identifiera platser med goda förutsättningar för solenergi med hjälp av
+        höjddata, skuggning och geografisk analys.
+      </p>
+      <a href="Solpotential.html">Läs mer &rarr;</a>
+    </article>
+
+    <article class="service-card">
+      <h3>Grönt &amp; blått vatten</h3>
+      <p>
+        Analysera vatten, vegetation, kustmiljöer och klimatanpassning med GIS
+        och satellitbaserade beslutsunderlag.
+      </p>
+      <a href="Vattenanalys.html">Läs mer &rarr;</a>
+    </article>
+  </div>
+</section>
 
 </body>
 </html>
