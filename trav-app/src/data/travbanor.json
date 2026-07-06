@@ -167,5 +167,15 @@
     "website": "https://www.skellefteatravet.se/",
     "phone": "0910-71 11 60",
     "trackLengthM": 1000
+  },
+  {
+    "id": "visby",
+    "name": "Visbytravet (Skrubbs)",
+    "city": "Visby",
+    "lat": 57.6195996,
+    "lng": 18.3259311,
+    "website": "https://www.visbytravet.se/",
+    "phone": "0498-66 09 41",
+    "trackLengthM": 1000
   }
 ]
