@@ -1,0 +1,171 @@
+[
+  {
+    "id": "solvalla",
+    "name": "Solvalla",
+    "city": "Stockholm (Bromma)",
+    "lat": 59.365833,
+    "lng": 17.938667,
+    "website": "https://www.solvalla.se/"
+  },
+  {
+    "id": "aby",
+    "name": "Åbytravet",
+    "city": "Mölndal",
+    "lat": 57.650278,
+    "lng": 12.001111,
+    "website": "https://www.abytravet.se/",
+    "phone": "031-706 66 00"
+  },
+  {
+    "id": "jagersro",
+    "name": "Jägersro",
+    "city": "Malmö",
+    "lat": 55.573333,
+    "lng": 13.064167,
+    "website": "https://www.jagersro.se/"
+  },
+  {
+    "id": "bergsaker",
+    "name": "Bergsåker travbana",
+    "city": "Sundsvall",
+    "lat": 62.412219,
+    "lng": 17.226389,
+    "website": "https://www.bergsaker.com/"
+  },
+  {
+    "id": "romme",
+    "name": "Romme travbana",
+    "city": "Borlänge",
+    "lat": 60.449719,
+    "lng": 15.496942,
+    "website": "https://www.rommetravet.se/"
+  },
+  {
+    "id": "axevalla",
+    "name": "Axevalla travbana",
+    "city": "Skara",
+    "lat": 58.399403,
+    "lng": 13.565342,
+    "website": "https://www.axevalla.se/"
+  },
+  {
+    "id": "kalmar",
+    "name": "Kalmartravet",
+    "city": "Kalmar",
+    "lat": 56.668026,
+    "lng": 16.27227,
+    "website": "https://www.kalmartravet.se/"
+  },
+  {
+    "id": "umaker",
+    "name": "Umåkers travbana",
+    "city": "Umeå",
+    "lat": 63.8209343,
+    "lng": 20.1778641,
+    "website": "https://www.umaker.se/"
+  },
+  {
+    "id": "amal",
+    "name": "Åmålstravet",
+    "city": "Åmål",
+    "lat": 59.033061,
+    "lng": 12.701939,
+    "website": "https://www.travsport.se/travbanor/amal/",
+    "trackLengthM": 800
+  },
+  {
+    "id": "vaggeryd",
+    "name": "Vaggerydstravet",
+    "city": "Vaggeryd",
+    "lat": 57.5212,
+    "lng": 14.1111,
+    "website": "https://www.vaggerydstravet.se/",
+    "trackLengthM": 1004
+  },
+  {
+    "id": "eskilstuna",
+    "name": "Sundbyholms travbana",
+    "city": "Eskilstuna",
+    "lat": 59.438889,
+    "lng": 16.613889,
+    "website": "https://www.travsport.se/travbanor/eskilstuna/"
+  },
+  {
+    "id": "gavle",
+    "name": "Gävletravet",
+    "city": "Gävle",
+    "lat": 60.688611,
+    "lng": 17.138889,
+    "website": "https://www.travsport.se/svensk-travsport/travsporten-i-sverige/travbanorna"
+  },
+  {
+    "id": "bollnas",
+    "name": "Bollnästravet",
+    "city": "Bollnäs",
+    "lat": 61.341333,
+    "lng": 16.336361,
+    "website": "https://www.travsport.se/svensk-travsport/travsporten-i-sverige/travbanorna"
+  },
+  {
+    "id": "orebro",
+    "name": "Örebrotravet",
+    "city": "Örebro",
+    "lat": 59.218331,
+    "lng": 15.158061,
+    "website": "https://www.orebrotravet.se/"
+  },
+  {
+    "id": "oviken",
+    "name": "Ovalla (Ovikens travbana)",
+    "city": "Oviken",
+    "lat": 62.998833,
+    "lng": 14.378056,
+    "website": "https://www.ovalla.se/",
+    "trackLengthM": 800
+  },
+  {
+    "id": "dannero",
+    "name": "Arena Dannero",
+    "city": "Nyland (Kramfors)",
+    "lat": 63.020831,
+    "lng": 17.804169,
+    "website": "https://www.arenadannero.se/",
+    "phone": "0612-505 01",
+    "capacity": 10000
+  },
+  {
+    "id": "arjang",
+    "name": "Årjängstravet",
+    "city": "Årjäng",
+    "lat": 59.390831,
+    "lng": 12.160561,
+    "website": "https://www.arjangstravet.se/"
+  },
+  {
+    "id": "farjestad",
+    "name": "Färjestadstravet",
+    "city": "Karlstad",
+    "lat": 59.405561,
+    "lng": 13.505561,
+    "website": "https://www.ftrav.se/"
+  },
+  {
+    "id": "hagmyren",
+    "name": "Hagmyrens travbana",
+    "city": "Hudiksvall",
+    "lat": 61.771389,
+    "lng": 17.116667,
+    "website": "https://www.travsport.se/vara-travbanor/norra-sverige/hagmyren",
+    "phone": "0650-54 20 60"
+  },
+  {
+    "id": "skelleftea",
+    "name": "Skellefteåtravet",
+    "city": "Skellefteå",
+    "lat": 64.7324,
+    "lng": 20.9502,
+    "website": "https://www.skellefteatravet.se/",
+    "phone": "0910-71 11 60",
+    "trackLengthM": 1000
+  }
+]

@@ -1,0 +1,15 @@
+{
+  "active": false,
+  "chains": [
+    {
+      "category": "fuel",
+      "names": ["Circle K", "OKQ8", "Preem", "St1", "Ingo"],
+      "label": "Sponsrad bensinstation"
+    },
+    {
+      "category": "fast_food",
+      "names": ["Max", "McDonald's", "Burger King", "Sibylla"],
+      "label": "Sponsrad snabbmat"
+    }
+  ]
+}
