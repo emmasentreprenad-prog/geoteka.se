@@ -1,0 +1,18 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+.venv/
+venv/
+*.egg-info/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+build/
+dist/
+
+# Generated report artifacts — never commit output of a run
+output/
+*.geojson
+!backtest/cases/**/*.geojson
+!backtest/reference/**/*.geojson
